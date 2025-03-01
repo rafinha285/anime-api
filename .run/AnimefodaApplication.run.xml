@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="AnimefodaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <envs>
+      <env name="DB_USERNAME" value="server" />
+      <env name="DB_PASSWORD" value="254" />
+      <env name="JWT_SECRET" value="83dafb9b40d582887e3c60fc21d52a22cd9845a6433f0cee36c658fb4e6d1fdf138bcb802a33957910e39ad2c2cbaa08771ab17fda262e9465be15616ee7c7e9" />
+      <env name="JWT_EXPIRATION" value="60000" />
+    </envs>
+    <module name="animefoda" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="me.abacate.animefoda.AnimefodaApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

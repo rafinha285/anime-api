@@ -24,7 +24,7 @@ class AnimeDetailsController(
     private val creatorsRepository: CreatorsRepository,
     private val studiosRepository: StudiosRepository
 ) {
-    @GetMapping("/details/g/{id}")
+    @GetMapping("/g/details/{id}")
     fun getDetail(@PathVariable id: UUID): ApiResponse<AnimeDetailsResponse>{
         val anime = animeRepository.findById(id).orElseThrow()
         { AnimeNotFound(id)}

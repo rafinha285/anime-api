@@ -18,7 +18,7 @@ class ProducersGetController(
     private val animeRepository: AnimeRepository
 ) {
     
-    @GetMapping("/producers/g/anime/{id}")
+    @GetMapping("/g/producers/anime/{id}")
     fun getProducersFromAnime(@PathVariable id:String): ApiResponse<List<ProducersModel>> {
         val anime = animeRepository.findById(UUID.fromString(id))
             .orElseThrow { AnimeNotFound("") }
@@ -30,9 +30,9 @@ class ProducersGetController(
         return ApiResponse(success = true,data = producers)
     }
     
-    @GetMapping("/producers/g/{id}")
-    fun getProducers(@PathVariable id: String): ProducersModel {
-        return repository.getReferenceById(UUID.fromString(id))
+    @GetMapping("/g/producers/{id}")
+    fun getProducers(@PathVariable id: String): ApiResponse<ProducersModel> {
+        return ApiResponse(success = true,data = repository.getReferenceById(UUID.fromString(id)))
     }
     
 }

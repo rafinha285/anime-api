@@ -25,6 +25,7 @@ class GlobalExceptionHandler {
             success = false,
             message = ex.message ?: "Erro interno do servidor"
         )
+        println(ex.message)
         return ResponseEntity(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }
