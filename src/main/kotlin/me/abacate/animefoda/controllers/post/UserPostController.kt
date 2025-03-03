@@ -1,5 +1,7 @@
 package me.abacate.animefoda.controllers.post
 
+import me.abacate.animefoda.errors.UnauthorizedResponse
+import me.abacate.animefoda.errors.UserNotFound
 import me.abacate.animefoda.jwt.JWTUtil
 import me.abacate.animefoda.models.UserSession
 import me.abacate.animefoda.repositories.UserRepository
@@ -24,6 +26,7 @@ data class LoginRequestEntity(
 @RestController
 @RequestMapping("/p/user/")
 class UserPostController(
+    private val userRepository: UserRepository,
     private val jwtUtil: JWTUtil
 ) {
     @PostMapping("/login/")
@@ -31,6 +34,11 @@ class UserPostController(
 //        val user = userRepository.getReferenceById(userSession.userId)
 //        userSessionRepository.save(userSession)
 //        val userToken = UserSession
+        val find = userRepository.findByEmailAndPassword(email = userSession.email, password = userSession.password)
+        if(find == null){
+            throw UnauthorizedResponse()
+        }
+        println(find.id)
         val jwtResponse = jwtUtil.generateToken(userSession)
         return ApiResponse(data = jwtResponse)
     }
