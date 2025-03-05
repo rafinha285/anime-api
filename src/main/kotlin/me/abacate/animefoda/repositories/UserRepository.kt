@@ -19,22 +19,21 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate){
         // A query utiliza parâmetros posicionais: ? serão substituídos na ordem
         val sql = """
             WITH hashed_password AS (
-                SELECT users.crypt(password, salt) AS hash
+                SELECT users.crypt(:password, salt) AS hash
                 FROM users.users
                 WHERE email = :email
             )
-            SELECT id, email, password, salt
+            SELECT *
             FROM users.users
             WHERE email = :email AND password = (SELECT hash FROM hashed_password)
         """.trimIndent()
         
         return try {
             
-            val namedParameters: SqlParameterSource = MapSqlParameterSource()
-                .addValue("email", email)
-                .addValue("password", password)
+            val namedParameters = mutableMapOf(email to "email",password to "password")
             
-            jdbcTemplate.queryForObject(sql,namedParameters,UserModel::class.java) {rs ->}
+            val dbRes = jdbcTemplate.queryForObject(sql,namedParameters,UserModel::class.java)
+            dbRes
 //            jdbcTemplate.queryForObject(sql, arrayOf(password, email, email)) { rs, _ ->
 //                UserModel(
 //                    id = UUID.fromString(rs.getString("id")),
