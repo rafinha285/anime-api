@@ -64,8 +64,8 @@ class JWTUtil (
         )
         
         val jwtToken = Jwts.builder()
-            .claim("sub",claims)
-            .claim("exp",expirationDate)
+            .claims(claims)
+            .expiration(expirationDate)
             .signWith(key)
             .compact()
         
