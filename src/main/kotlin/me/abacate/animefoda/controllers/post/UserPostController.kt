@@ -1,5 +1,9 @@
 package me.abacate.animefoda.controllers.post
 
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.errors.UserNotFound
 import me.abacate.animefoda.jwt.JWTUtil
@@ -9,11 +13,7 @@ import me.abacate.animefoda.repositories.UserRepositoryWithoutPassword
 import me.abacate.animefoda.repositories.UserSessionRepository
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.response.AuthResponse
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 data class LoginRequestEntity(
     val email: String,
@@ -24,13 +24,16 @@ data class LoginRequestEntity(
 )
 
 @RestController
-@RequestMapping("/p/user/")
+@RequestMapping("/p/user")
 class UserPostController(
     private val userRepository: UserRepository,
     private val jwtUtil: JWTUtil
 ) {
     @PostMapping("/login/")
-    fun login(@RequestBody userSession: LoginRequestEntity): ApiResponse<AuthResponse> {
+    fun login(
+        @RequestBody userSession: LoginRequestEntity,
+        @RequestHeader(name = "User-Agent") userAgent: String,
+        response: HttpServletResponse): ApiResponse<AuthResponse> {
 //        val user = userRepository.getReferenceById(userSession.userId)
 //        userSessionRepository.save(userSession)
 //        val userToken = UserSession
@@ -39,7 +42,12 @@ class UserPostController(
             throw UnauthorizedResponse()
         }
         println(find.id)
-        val jwtResponse = jwtUtil.generateToken(userSession)
+        if(userAgent == ""){
+            throw BadRequestResponse()
+        }
+        val jwtResponse = jwtUtil.generateToken(userSession,userAgent)
+        val cookie = Cookie("token", jwtResponse.token)
+        response.addCookie(cookie)
         return ApiResponse(data = jwtResponse)
     }
 }

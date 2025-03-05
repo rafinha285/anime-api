@@ -29,7 +29,7 @@ class JWTUtil (
     @Value("\${jwt.expiration}")
     private val expiration: Long = 60000
     
-    fun generateToken(userSession:LoginRequestEntity): AuthResponse {
+    fun generateToken(userSession:LoginRequestEntity,userAgent:String): AuthResponse {
         val expirationDate = Date(System.currentTimeMillis() + expiration)
         
         val key = Keys.hmacShaKeyFor(secret.toByteArray())
@@ -49,7 +49,7 @@ class JWTUtil (
             userId = user.id,
             createdAt = LocalDateTime.now(),
             expiresAt = expirationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
-            userAgent = "", // Se tiver o user-agent disponível, atribua aqui
+            userAgent = userAgent, // Se tiver o user-agent disponível, atribua aqui
             webGlVendor = userSession.WebGLVendor,
             webGlRenderer = userSession.WebGLRenderer,
             enabled = true,
