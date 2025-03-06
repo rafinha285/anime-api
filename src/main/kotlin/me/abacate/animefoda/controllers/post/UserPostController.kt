@@ -1,16 +1,11 @@
 package me.abacate.animefoda.controllers.post
 
 import jakarta.servlet.http.Cookie
-import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.errors.UnauthorizedResponse
-import me.abacate.animefoda.errors.UserNotFound
 import me.abacate.animefoda.jwt.JWTUtil
-import me.abacate.animefoda.models.UserSession
 import me.abacate.animefoda.repositories.UserRepository
-import me.abacate.animefoda.repositories.UserRepositoryWithoutPassword
-import me.abacate.animefoda.repositories.UserSessionRepository
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.response.AuthResponse
 import org.springframework.web.bind.annotation.*
@@ -29,14 +24,12 @@ class UserPostController(
     private val userRepository: UserRepository,
     private val jwtUtil: JWTUtil
 ) {
-    @PostMapping("/login/")
+    @PostMapping("/login")
     fun login(
         @RequestBody userSession: LoginRequestEntity,
         @RequestHeader(name = "User-Agent") userAgent: String,
-        response: HttpServletResponse): ApiResponse<AuthResponse> {
-//        val user = userRepository.getReferenceById(userSession.userId)
-//        userSessionRepository.save(userSession)
-//        val userToken = UserSession
+        response: HttpServletResponse
+    ): ApiResponse<AuthResponse> {
         val find = userRepository.findByEmailAndPassword(email = userSession.email, password = userSession.password)
         if(find == null){
             throw UnauthorizedResponse()

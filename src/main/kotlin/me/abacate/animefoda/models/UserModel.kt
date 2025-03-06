@@ -41,7 +41,7 @@ data class UserModel(
     
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(
-        name = "roles",
+        name = "role",
         columnDefinition = "role_enum[]"
     )
     val roles:List<Role> =emptyList(),
