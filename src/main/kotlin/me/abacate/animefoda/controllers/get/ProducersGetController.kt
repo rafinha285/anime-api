@@ -27,7 +27,7 @@ class ProducersGetController(
             val producer = repository.getReferenceById(p)
             producers.add(producer)
         }
-        return ApiResponse(success = true,data = producers)
+        return ApiResponse(data = producers)
     }
     
     @GetMapping("/g/producers/{id}")
