@@ -1,5 +1,7 @@
 package me.abacate.animefoda.controllers.post
 
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import me.abacate.animefoda.errors.InternalServerErrorResponse
 import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.jwt.JWTUtil
@@ -18,24 +20,14 @@ class SeasonPostController (
     @PostMapping("/new")
     fun newSeason(
         @RequestBody season: SeasonModel,
-        @RequestHeader(name = "User-Agent") userAgent: String,
-        @RequestHeader(name = "timeZone") timeZone: String,
-        @RequestHeader(name = "webGlRenderer") webGlRenderer: String,
-        @RequestHeader(name = "webGlVendor") webGlVendor: String,
+        request: HttpServletRequest,
+        response: HttpServletResponse,
         @CookieValue(name = "token") token: String
     ):ApiResponse<String?> {
         try {
-            if(jwtUtil.checkToken(token, userAgent, timeZone, webGlVendor, webGlRenderer)){
-                try{
-                    seasonRepository.save(season)
-                    
-                }catch (e:Exception){
-                    throw InternalServerErrorResponse(e.localizedMessage)
-                }
-                return ApiResponse(success = true)
-            }else{
-                throw UnauthorizedResponse()
-            }
+            jwtUtil.checkToken(token, request, response)
+            seasonRepository.save(season)
+            return ApiResponse()
         }catch (e: Exception){
             return ApiResponse(success = false, message = e.message)
         }

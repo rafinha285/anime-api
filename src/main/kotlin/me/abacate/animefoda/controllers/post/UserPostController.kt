@@ -40,6 +40,7 @@ class UserPostController(
         }
         val jwtResponse = jwtUtil.generateToken(userSession,userAgent)
         val cookie = Cookie("token", jwtResponse.token)
+        cookie.path = "/"
         response.addCookie(cookie)
         return ApiResponse(data = jwtResponse)
     }
