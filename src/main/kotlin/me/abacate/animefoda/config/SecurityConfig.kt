@@ -1,26 +1,78 @@
 package me.abacate.animefoda.config
 
+import com.nimbusds.jose.jwk.JWK
+import com.nimbusds.jose.jwk.JWKSet
+import com.nimbusds.jose.jwk.RSAKey
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet
+import com.nimbusds.jose.proc.SecurityContext
+import me.abacate.animefoda.filters.JwtSessionValidationFilter
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.oauth2.jwt.*
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.web.cors.CorsConfigurationSource
+import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
 
 @Configuration
 class SecurityConfig {
     
+    @Value("\${spring.security.oauth2.resourceserver.jwt.secret}")
+    private lateinit var secret: String
+    
+    
+    @Value("\${jwt.private.key}")
+    private lateinit var privateKeyPath: String;
+    
+    @Value("\${jwt.public.key}")
+    private lateinit var publicKeyPath: String;
+    
     @Bean
-    fun securityFilterChain(
-        http: HttpSecurity,
-        corsConfigurationSource: CorsConfigurationSource // Injeta o bean criado na CorsConfig
-    ): SecurityFilterChain {
+    fun rsaPrivateKey(): RSAPrivateKey = loadRSAPrivateKey(privateKeyPath)
+    
+    @Bean
+    fun rsaPublicKey(): RSAPublicKey = loadRSAPublicKey(publicKeyPath)
+    
+    //filtro de oauth2 para rotas especificas
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        
         http
-            .cors { it.configurationSource(corsConfigurationSource) } // Usa a instância injetada
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
-                auth.anyRequest().permitAll()
+                auth
+                    .requestMatchers("/g/user/**").authenticated()
+                    .anyRequest().permitAll()
             }
+            .oauth2ResourceServer { resourceServer -> resourceServer.jwt(Customizer.withDefaults())}
+            .sessionManagement {session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+        
         return http.build()
+    }
+    
+    //encoder de jwt
+    @Bean
+    fun jwtEncoder(): JwtEncoder {
+        val jwk:JWK = RSAKey.Builder(this.rsaPublicKey())
+            .privateKey(this.rsaPrivateKey())
+            .build();
+        val jwks = ImmutableJWKSet<SecurityContext>(JWKSet(jwk))
+        return NimbusJwtEncoder(jwks)
+    }
+    
+    //decoder do jwt
+    @Bean
+    fun jwtDecoder(): JwtDecoder {
+        return NimbusJwtDecoder.withPublicKey(rsaPublicKey()).build()
+    }
+    
+    @Bean
+    fun bCryptPasswordEncoder():BCryptPasswordEncoder{
+        return BCryptPasswordEncoder()
     }
 }
