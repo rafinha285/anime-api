@@ -1,128 +1,95 @@
 package me.abacate.animefoda.jwt
 
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.security.Keys
 import me.abacate.animefoda.controllers.post.LoginRequestEntity
-import me.abacate.animefoda.errors.UnauthorizedResponse
+import me.abacate.animefoda.models.UserModel
 import me.abacate.animefoda.models.UserSession
-import me.abacate.animefoda.models.UserToken
 import me.abacate.animefoda.repositories.UserRepository
 import me.abacate.animefoda.repositories.UserSessionRepository
-import me.abacate.animefoda.response.AuthResponse
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpStatus
+import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.security.oauth2.jwt.JwtClaimsSet
+import org.springframework.security.oauth2.jwt.JwtEncoder
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters
 import org.springframework.stereotype.Component
-import org.springframework.web.server.ResponseStatusException
+import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.*
 
+data class GenTokenResponse(
+    val jwt:Jwt,
+    val refreshToken:String,
+    val expiresIn:Long,
+)
 
 @Component
 class JWTUtil (
-    val userSessionRepository: UserSessionRepository,
-    val userRepository: UserRepository
+        private val userSessionRepository: UserSessionRepository,
+        private val userRepository: UserRepository,
+        private val bCryptPasswordEncoder: BCryptPasswordEncoder,
+        private val jwtEncoder: JwtEncoder
     ){
     
     @Value("\${jwt.secret}")
     private lateinit var secret: String
     
     @Value("\${jwt.expiration}")
-    private val expiration: Long = 60000
+    private val expiresIn: Long = 300L
     
-    fun decodeJwt(token: String): Claims? {
-        return try {
-            Jwts.parser()
-                .verifyWith(Keys.hmacShaKeyFor(secret.toByteArray()))
-                .build()
-                .parseSignedClaims(token)
-                .body
-        } catch (e: Exception) {
-            println("Erro ao decodificar JWT: ${e.message}")
-            null
+    fun generateToken(requestEntity: LoginRequestEntity,userAgent:String):GenTokenResponse{
+        val user = userRepository.findByEmail((requestEntity.email))
+            ?: throw BadCredentialsException("Invalid email or password")
+        if(!user.isLoginCorrect(requestEntity,bCryptPasswordEncoder)){
+            throw BadCredentialsException("Invalid email or password")
         }
-    }
-    
-    fun generateToken(userSession:LoginRequestEntity,userAgent:String): AuthResponse {
-        val expirationDate = Date(System.currentTimeMillis() + expiration)
         
-        val key = Keys.hmacShaKeyFor(secret.toByteArray())
+        val now = Instant.now()
         
-        val user = userRepository.findByEmailAndPassword(userSession.email, userSession.password)
-            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found")
+        val expiresInInstant = now.plusSeconds(expiresIn)
         
+        val sessionId = UUID.randomUUID()
         
-        val userToken = UserToken(
-            _id = user.id,
-            username = user.username,
-            expires_at = expirationDate,
-            session_id = UUID.randomUUID()
-        )
+        val claims: JwtClaimsSet = JwtClaimsSet.builder()
+            .issuer("animefoda")
+            .issuedAt(now)
+            .subject(user.id.toString())
+            .expiresAt(expiresInInstant)
+            .claim("session_id",sessionId.toString())
+            .build()
         
-        val userSessionEntity = UserSession(
+        val jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims))
+        
+        val userSession = UserSession(
+            sessionId = sessionId,
             userId = user.id,
-            createdAt = LocalDateTime.now(),
-            expiresAt = expirationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
-            userAgent = userAgent, // Se tiver o user-agent disponível, atribua aqui
-            webGlVendor = userSession.WebGLVendor,
-            webGlRenderer = userSession.WebGLRenderer,
-            enabled = true,
-            timeZone = userSession.timeZone
+            userAgent = userAgent,
+            webGlRenderer = requestEntity.WebGLRenderer,
+            webGlVendor = requestEntity.WebGLVendor,
+            timeZone = requestEntity.timeZone,
         )
         
+        userSessionRepository.save(userSession);
         
-        val claims = mutableMapOf<String, Any>(
-            "_id" to userToken._id,
-            "username" to userToken.username,
-            "session_id" to userToken.session_id
-        )
+        val refreshToken = generateRefreshToken(user)
         
-        val jwtToken = Jwts.builder()
-            .claims(claims)
-            .expiration(expirationDate)
-            .signWith(key)
-            .compact()
-        
-        userSessionRepository.save(userSessionEntity)
-        
-        return AuthResponse(
-            token = jwtToken,
-            session_id = userToken.session_id,
-            expires = expirationDate
-        )
+        return GenTokenResponse(jwtValue,refreshToken, expiresIn)
     }
-    fun checkToken(
-        token: String,
-        userAgent:String,
-        timezone:String,
-        webGlRenderer:String,
-        webGlVendor:String
-    ): Boolean {
-        val tokenn = decodeJwt(token)
-        if(tokenn == null){
-            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token not found")
-        }
-        val userId = UUID.fromString(tokenn.get("_id") as String)
-        val username = tokenn.get("username") as String
-        val sessionId = UUID.fromString(tokenn.get("session_id") as String)
+    
+    fun generateRefreshToken(user:UserModel):String{
+        val sessionId = UUID.randomUUID()
+        val now = Instant.now()
         
+        val refreshExpiration =  now.plusSeconds(7*24*3600)
         
-        val row = userSessionRepository.findBySessionIdAndEnabled(sessionId = sessionId, enabled = true)
-        ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Session not found")
+        val claims = JwtClaimsSet.builder()
+            .issuer("animefoda")
+            .issuedAt(now)
+            .subject(user.id.toString())
+            .expiresAt(refreshExpiration)
+            .claim("session_id",sessionId.toString())
+            .build()
         
-        if(row.expiresAt > LocalDateTime.now()) {
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Token expired")
-        }
-        if(
-            row.userAgent == userAgent &&
-            row.timeZone == timezone &&
-            row.webGlRenderer == webGlRenderer &&
-            row.webGlVendor == webGlVendor
-        ){
-            return true;
-        }else{
-            throw UnauthorizedResponse()
-        }
+        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
     }
 }

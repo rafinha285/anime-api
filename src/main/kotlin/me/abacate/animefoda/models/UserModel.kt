@@ -1,9 +1,11 @@
 package me.abacate.animefoda.models
 
 import jakarta.persistence.*
+import me.abacate.animefoda.controllers.post.LoginRequestEntity
 import me.abacate.animefoda.enums.Role
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDate
 import java.util.*
 
@@ -44,5 +46,10 @@ data class UserModel(
         name = "role",
         columnDefinition = "role_enum[]"
     )
+    
     val roles:List<Role> =emptyList(),
-)
+){
+    fun isLoginCorrect(loginRequest:LoginRequestEntity, passwordEncoder: PasswordEncoder):Boolean{
+        return passwordEncoder.matches(loginRequest.password,this.password)
+    }
+}

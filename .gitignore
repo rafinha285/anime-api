@@ -37,4 +37,3 @@ build/
 
 /.run
 /src/main/resources/*.pem
-/src/main/resources/public.pem
