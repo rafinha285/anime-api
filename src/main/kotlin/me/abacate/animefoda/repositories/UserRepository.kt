@@ -25,6 +25,8 @@ interface UserRepository:JpaRepository<UserModel, UUID> {
         @Param("email") email: String,
         @Param("password")password: String
     ): UserModel?
+    
+    fun findByEmail(email: String): UserModel?
 //    fun findByEmailAndPassword(email: String, password: String): UserModel? {
 //        // A query utiliza parâmetros posicionais: ? serão substituídos na ordem
 //        val sql = """

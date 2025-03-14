@@ -25,7 +25,7 @@ class SeasonPostController (
         @CookieValue(name = "token") token: String
     ):ApiResponse<String?> {
         try {
-            jwtUtil.checkToken(token, request, response)
+//            jwtUtil.checkToken(token, request, response)
             seasonRepository.save(season)
             return ApiResponse()
         }catch (e: Exception){

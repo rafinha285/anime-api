@@ -23,7 +23,7 @@ class UserGetController(
         @CookieValue(name = "token") token: String
     ): ApiResponse<String?> {
         try{
-            jwtUtil.checkToken(token, request, response);
+//            jwtUtil.checkToken(token, request, response);
             return ApiResponse(success = true)
         }catch(e: Exception){
             throw e
