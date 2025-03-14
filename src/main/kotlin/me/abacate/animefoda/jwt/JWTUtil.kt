@@ -37,15 +37,6 @@ class JWTUtil (
     @Value("\${jwt.expiration}")
     private val expiresIn: Long = 300L
     
-//    fun decodeJwt(token: String): Claims {
-//        return Jwts.parser()
-//            .verifyWith(Keys.hmacShaKeyFor(secret.toByteArray()))
-//            .clockSkewSeconds(300)
-//            .build()
-//            .parseSignedClaims(token)
-//            .payload
-//    }
-    
     fun generateToken(requestEntity: LoginRequestEntity,userAgent:String):GenTokenResponse{
         val user = userRepository.findByEmail((requestEntity.email))
             ?: throw BadCredentialsException("Invalid email or password")
@@ -101,100 +92,4 @@ class JWTUtil (
         
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
     }
-    
-//    fun generateToken(userSession:LoginRequestEntity,userAgent:String): AuthResponse {
-//        val expirationDate = Date(System.currentTimeMillis() + expiration)
-//
-//        val user = userRepository.findByEmailAndPassword(userSession.email, userSession.password)
-//            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found")
-//
-//        val sessionId = UUID.randomUUID()
-//
-//        val key = Keys.hmacShaKeyFor(secret.toByteArray())
-//
-//        val userToken = UserToken(
-//            _id = user.id,
-//            username = user.username,
-//            expires_at = expirationDate,
-//            session_id = UUID.randomUUID()
-//        )
-//
-//        val userSessionEntity = UserSession(
-//            sessionId = sessionId,
-//            userId = user.id,
-//            createdAt = LocalDateTime.now(),
-//            expiresAt = expirationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
-//            userAgent = userAgent, // Se tiver o user-agent disponível, atribua aqui
-//            webGlVendor = userSession.WebGLVendor,
-//            webGlRenderer = userSession.WebGLRenderer,
-//            enabled = true,
-//            timeZone = userSession.timeZone
-//        )
-//
-//
-//        val claims = mutableMapOf<String, Any>(
-//            "_id" to userToken._id,
-//            "username" to userToken.username,
-//            "session_id" to sessionId,
-//        )
-//
-//        val jwtToken = Jwts.builder()
-//            .claims(claims)
-//            .expiration(expirationDate)
-//            .signWith(key)
-//            .compact()
-//
-//        userSessionRepository.save(userSessionEntity)
-//
-//        return AuthResponse(
-//            token = jwtToken,
-//            session_id = sessionId,
-//            expires = expirationDate
-//        )
-//    }
-
-//    fun checkToken(
-//        token: String,
-//        request: HttpServletRequest,
-//        response: HttpServletResponse
-//    ) {
-//        val tokenn = decodeJwt(token)
-//        if(tokenn == null){
-//            throw UnauthorizedResponse()
-//        }
-//        val userId = UUID.fromString(tokenn.get("_id") as String)
-//        val username = tokenn.get("username") as String
-//        val sessionId = UUID.fromString(tokenn.get("session_id") as String)
-//
-//
-//        val row = userSessionRepository.findBySessionIdAndEnabled(sessionId,userId)
-//
-//        if(row == null){
-//            throw UnauthorizedResponse()
-//        }
-//
-//
-//        if(row.expiresAt < LocalDateTime.now()) {
-//            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Token expired")
-//        }
-//
-//        val userAgent = request.getHeader("User-Agent") ?: ""
-//        val timeZone = request.getHeader("timeZone") ?: ""
-//        val webGlRenderer = request.getHeader("webGlRenderer") ?: ""
-//        val webGlVendor = request.getHeader("webGlVendor") ?: ""
-//
-//        if(userAgent.isEmpty() || timeZone.isEmpty() || webGlRenderer.isEmpty() || webGlVendor.isEmpty()){
-//            throw BadRequestResponse("Request Header missing")
-//        }
-//        if(
-//            !(row.userAgent == userAgent &&
-//            row.timeZone == timeZone &&
-//            row.webGlRenderer == webGlRenderer &&
-//            row.webGlVendor == webGlVendor)
-//        ){
-//            throw UnauthorizedResponse()
-//        }
-//        val cookie = Cookie("token", genToken(tokenn))
-//        response.addCookie(cookie)
-//    }
 }

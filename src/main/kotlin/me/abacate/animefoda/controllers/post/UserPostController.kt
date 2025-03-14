@@ -27,26 +27,6 @@ class UserPostController(
     private val userRepository: UserRepository,
     private val jwtUtil: JWTUtil,
 ) {
-    //    @PostMapping("/login")
-//    fun login(
-//        @RequestBody userSession: LoginRequestEntity,
-//        @RequestHeader(name = "User-Agent") userAgent: String,
-//        response: HttpServletResponse
-//    ): ApiResponse<AuthResponse> {
-//        val find = userRepository.findByEmailAndPassword(email = userSession.email, password = userSession.password)
-//        if(find == null){
-//            throw UnauthorizedResponse()
-//        }
-//        println(find.id)
-//        if(userAgent == ""){
-//            throw BadRequestResponse()
-//        }
-//        val jwtResponse = jwtUtil.generateToken(userSession,userAgent)
-//        val cookie = Cookie("token", jwtResponse.token)
-//        cookie.path = "/"
-//        response.addCookie(cookie)
-//        return ApiResponse(data = jwtResponse)
-//    }
     @PostMapping("/login")
     fun login(
         @RequestBody loginRequestEntity: LoginRequestEntity,
