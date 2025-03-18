@@ -36,4 +36,5 @@ build/
 /.env
 
 /.run
+/src/main/resources/**.pem
 /src/main/resources/*.pem
