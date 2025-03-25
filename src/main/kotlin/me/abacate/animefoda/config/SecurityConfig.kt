@@ -47,6 +47,7 @@ class SecurityConfig {
             .authorizeHttpRequests { auth ->
                 auth
                     .requestMatchers("/g/user/**").authenticated()
+                    .requestMatchers("/p/animel").authenticated()
                     .anyRequest().permitAll()
             }
             .oauth2ResourceServer { resourceServer -> resourceServer.jwt(Customizer.withDefaults())}

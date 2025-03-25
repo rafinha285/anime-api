@@ -8,10 +8,7 @@ import me.abacate.animefoda.repositories.UserSessionRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.oauth2.jwt.Jwt
-import org.springframework.security.oauth2.jwt.JwtClaimsSet
-import org.springframework.security.oauth2.jwt.JwtEncoder
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters
+import org.springframework.security.oauth2.jwt.*
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.LocalDateTime
@@ -24,12 +21,13 @@ data class GenTokenResponse(
 )
 
 @Component
-class JWTUtil (
-        private val userSessionRepository: UserSessionRepository,
-        private val userRepository: UserRepository,
-        private val bCryptPasswordEncoder: BCryptPasswordEncoder,
-        private val jwtEncoder: JwtEncoder
-    ){
+class JWTUtil(
+    private val userSessionRepository: UserSessionRepository,
+    private val userRepository: UserRepository,
+    private val bCryptPasswordEncoder: BCryptPasswordEncoder,
+    private val jwtEncoder: JwtEncoder,
+    private val jwtDecoder: JwtDecoder
+){
     
     @Value("\${jwt.secret}")
     private lateinit var secret: String
@@ -48,20 +46,29 @@ class JWTUtil (
         
         val expiresInInstant = now.plusSeconds(expiresIn)
         
-        val sessionId = UUID.randomUUID()
+        val refreshSessionId = UUID.randomUUID()
+//        val accessSessionId = UUID.randomUUID()
         
+        println("refreshId: $refreshSessionId")
+//        println("accessSessionId: $accessSessionId")
+        
+        //criar o refresh token
+        val refreshToken = generateRefreshToken(user,refreshSessionId)
+        
+        //criar o access token
         val claims: JwtClaimsSet = JwtClaimsSet.builder()
             .issuer("animefoda")
             .issuedAt(now)
             .subject(user.id.toString())
             .expiresAt(expiresInInstant)
-            .claim("session_id",sessionId.toString())
+            .claim("session_id",refreshSessionId.toString())
+//            .claim("session_id", accessSessionId.toString())
             .build()
         
         val jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims))
         
         val userSession = UserSession(
-            sessionId = sessionId,
+            sessionId = refreshSessionId,
             userId = user.id,
             userAgent = userAgent,
             webGlRenderer = requestEntity.WebGLRenderer,
@@ -69,15 +76,12 @@ class JWTUtil (
             timeZone = requestEntity.timeZone,
         )
         
-        userSessionRepository.save(userSession);
-        
-        val refreshToken = generateRefreshToken(user)
+        userSessionRepository.save(userSession)
         
         return GenTokenResponse(jwtValue,refreshToken, expiresIn)
     }
     
-    fun generateRefreshToken(user:UserModel):String{
-        val sessionId = UUID.randomUUID()
+    fun generateRefreshToken(user:UserModel,sessionId:UUID):String{
         val now = Instant.now()
         
         val refreshExpiration =  now.plusSeconds(7*24*3600)
@@ -92,4 +96,41 @@ class JWTUtil (
         
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
     }
+    
+    fun refreshAccessToken(refreshToken: String,userAgent: String):GenTokenResponse{
+        val jwt = try{
+            jwtDecoder.decode(refreshToken)
+        }catch(e: JwtException){
+            throw BadCredentialsException("Invalid refresh token")
+        }
+        println("jwt expiresAt: "+Date.from(jwt.expiresAt))
+        println("jwt subject: "+jwt.subject)
+        println("jwt sessionId: "+jwt.getClaim<String>("session_id").toString())
+        val userId = UUID.fromString(jwt.subject)
+        val refreshSessionId = UUID.fromString(jwt.getClaim<String>("session_id"))
+//        val accessSessionId = UUID.fromString(jwt.getClaim<String>("session_id"))
+        
+        
+        
+        //checa se a session do refresh token existe e é valida
+        userSessionRepository.findBySessionIdAndEnabled(refreshSessionId,userId)
+            ?:throw BadCredentialsException("Invalid Session or expired refresh token")
+        
+        val now = Instant.now()
+        val expiresInInstant = now.plusSeconds(expiresIn)
+        
+        val newClaims = JwtClaimsSet.builder()
+            .issuer("animefoda")
+            .issuedAt(now)
+            .subject(userId.toString())
+            .expiresAt(expiresInInstant)
+            .claim("session_id",refreshSessionId.toString())
+//            .claim("refresh_session_id",refreshSessionId.toString())
+            .build()
+        
+        val newJwtValue = jwtEncoder.encode(JwtEncoderParameters.from(newClaims))
+        
+        return GenTokenResponse(newJwtValue, refreshToken, expiresIn)
+    }
+    
 }

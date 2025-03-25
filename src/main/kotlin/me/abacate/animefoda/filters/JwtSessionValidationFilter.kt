@@ -3,6 +3,7 @@ package me.abacate.animefoda.filters
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.repositories.UserSessionRepository
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.security.oauth2.jwt.JwtDecoder
@@ -61,7 +62,8 @@ class JwtSessionValidationFilter(
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido: ${ex.message}")
                 return
             }catch(ex: Exception){
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Erro na validação da sessão: ${ex.message}")
+                UnauthorizedResponse()
+//                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Erro na validação da sessão: ${ex.message}")
                 return
             }
         }
