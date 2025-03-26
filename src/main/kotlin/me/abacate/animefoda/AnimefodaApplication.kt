@@ -7,8 +7,7 @@ import java.util.*
 
 @SpringBootApplication
 class AnimefodaApplication
-
-fun main(args :Array<String>) {
+fun main(args: Array<String>) {
     runApplication<AnimefodaApplication>(*args)
 }
 
@@ -16,3 +15,4 @@ fun main(args :Array<String>) {
 fun init() {
     TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
 }
+
