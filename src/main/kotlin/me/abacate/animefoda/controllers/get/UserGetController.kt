@@ -4,7 +4,6 @@ import me.abacate.animefoda.repositories.UserAnimelistRepository
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import me.abacate.animefoda.errors.UserNotFound
-import me.abacate.animefoda.models.UserAnimelistModel
 import me.abacate.animefoda.models.UserModelWithoutPassword
 import me.abacate.animefoda.repositories.UserRepositoryWithoutPassword
 import me.abacate.animefoda.response.ApiResponse
@@ -21,13 +20,11 @@ class UserGetController(
 ) {
     @GetMapping("/verify")
     fun verify(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
     ): ApiResponse<String?> {
-        try{
-            return ApiResponse(success = true)
+        return try{
+            ApiResponse(success = true)
         }catch(e: Exception){
-            return ApiResponse(success = false, message = e.localizedMessage)
+            ApiResponse(success = false, message = e.localizedMessage)
         }
     }
     

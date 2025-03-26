@@ -13,6 +13,13 @@
     </method>
   </configuration>
   <configuration default="false" name="AnimefodaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <additionalParameters>
+      <param>
+        <option name="enabled" value="true" />
+        <option name="name" value="management.endpoint.env.show-values" />
+        <option name="value" value="when_authorized" />
+      </param>
+    </additionalParameters>
     <envs>
       <env name="DB_USERNAME" value="postgres" />
       <env name="DB_PASSWORD" value="285" />
