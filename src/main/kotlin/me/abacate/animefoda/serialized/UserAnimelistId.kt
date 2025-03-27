@@ -5,7 +5,12 @@ import java.io.Serializable
 import java.util.*
 
 @Embeddable
-data class UserAnimeListId(
-    val userId: UUID = UUID.randomUUID(),
-    val animeId: UUID = UUID.randomUUID()
-) : Serializable
+data class UserAnimelistId(
+    val userId: UUID,
+    val animeId: UUID
+) : Serializable{
+    protected constructor() : this(
+        UUID.fromString("00000000-0000-0000-0000-000000000000"),
+        UUID.fromString("00000000-0000-0000-0000-000000000000")
+    )
+}
