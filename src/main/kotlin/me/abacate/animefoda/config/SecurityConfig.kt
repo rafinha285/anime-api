@@ -55,7 +55,6 @@ class SecurityConfig {
                 resourceServer.jwt(Customizer.withDefaults())
                 resourceServer.authenticationEntryPoint(jwtAuthenticationEntryPoint)
             }
-//            .exceptionHandling{ exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint) }
             .sessionManagement {session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         
         return http.build()
