@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.JWKSet
 import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet
 import com.nimbusds.jose.proc.SecurityContext
+import me.abacate.animefoda.exceptionHandler.JwtAuthenticationEntryPoint
 import me.abacate.animefoda.filters.JwtSessionValidationFilter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.servlet.FilterRegistrationBean
@@ -40,17 +41,20 @@ class SecurityConfig {
     
     //filtro de oauth2 para rotas especificas
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun securityFilterChain(http: HttpSecurity, jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint): SecurityFilterChain {
         
         http
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
                 auth
                     .requestMatchers("/g/user/**").authenticated()
-                    .requestMatchers("/p/animel").authenticated()
+                    .requestMatchers("/p/animelist/**").authenticated()
                     .anyRequest().permitAll()
             }
-            .oauth2ResourceServer { resourceServer -> resourceServer.jwt(Customizer.withDefaults())}
+            .oauth2ResourceServer { resourceServer ->
+                resourceServer.jwt(Customizer.withDefaults())
+                resourceServer.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            }
             .sessionManagement {session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         
         return http.build()

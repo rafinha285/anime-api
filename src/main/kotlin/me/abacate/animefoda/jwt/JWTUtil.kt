@@ -33,7 +33,7 @@ class JWTUtil(
     private lateinit var secret: String
     
     @Value("\${jwt.expiration}")
-    private val expiresIn: Long = 300L
+    private val expiresIn: Long = 172800L
     
     fun generateToken(requestEntity: LoginRequestEntity,userAgent:String):GenTokenResponse{
         val user = userRepository.findByEmail((requestEntity.email))
