@@ -1,8 +1,7 @@
 package me.abacate.animefoda.repositories
 
-import me.abacate.animefoda.enums.Role
+import me.abacate.animefoda.enums.RoleEnum
 import me.abacate.animefoda.models.UserModel
-import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -29,16 +28,16 @@ interface UserRepository:JpaRepository<UserModel, UUID> {
     
     fun findByEmail(email: String): UserModel?
     
-    @Query(
-        value = """
-            SELECT  FROM users.users WHERE _id = :id AND ARRAY_CONTAINS()
-        """,
-        nativeQuery = true
-    )
-    fun isInRole(
-        @Param("id") id: UUID,
-        role: Role
-    ): Boolean
+//    @Query(
+//        value = """
+//            SELECT  FROM users.users WHERE _id = :id AND ARRAY_CONTAINS()
+//        """,
+//        nativeQuery = true
+//    )
+//    fun isInRole(
+//        @Param("id") id: UUID,
+//        roleEnum: RoleEnum
+//    ): Boolean
 //    fun findByEmailAndPassword(email: String, password: String): UserModel? {
 //        // A query utiliza parâmetros posicionais: ? serão substituídos na ordem
 //        val sql = """

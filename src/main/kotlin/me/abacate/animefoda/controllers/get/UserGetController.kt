@@ -3,10 +3,13 @@ package me.abacate.animefoda.controllers.get
 import me.abacate.animefoda.repositories.UserAnimelistRepository
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import me.abacate.animefoda.enums.RoleName
+import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.errors.UserNotFound
 import me.abacate.animefoda.models.UserModelWithoutPassword
 import me.abacate.animefoda.repositories.UserRepositoryWithoutPassword
 import me.abacate.animefoda.response.ApiResponse
+import me.abacate.animefoda.services.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
@@ -17,6 +20,7 @@ import java.util.*
 class UserGetController(
     private val userAnimelistRepository: UserAnimelistRepository,
     private val userRepositoryWithoutPassword: UserRepositoryWithoutPassword,
+    private val userService: UserService,
 ) {
     @GetMapping("/verify")
     fun verify(
@@ -25,6 +29,20 @@ class UserGetController(
             ApiResponse(success = true)
         }catch(e: Exception){
             ApiResponse(success = false, message = e.localizedMessage)
+        }
+    }
+    
+    @GetMapping("/check/role/{roleName}")
+    fun userIsAdm(
+        @PathVariable("roleName") roleName: String,
+        @AuthenticationPrincipal jwt: Jwt,
+    ):ApiResponse<Boolean>{
+        try{
+            val role = RoleName.valueOf(roleName)
+            val isAdm = userService.containsRole(UUID.fromString(jwt.subject),role)
+            return ApiResponse(data = isAdm)
+        }catch(e: Exception){
+            throw BadRequestResponse(reason = e.localizedMessage)
         }
     }
     

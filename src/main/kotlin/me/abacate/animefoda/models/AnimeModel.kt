@@ -73,5 +73,8 @@ data class AnimeModel(
     val state: State? = null, // enum que você deve definir
     
     @Column(name = "releasedate")
-    val releaseDate: LocalDate? = null
+    val releaseDate: LocalDate? = null,
+    
+    @OneToMany(mappedBy = "anime_id", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val seasons: List<SeasonModel>? = emptyList()
 )
