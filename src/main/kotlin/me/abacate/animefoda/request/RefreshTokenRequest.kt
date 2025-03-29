@@ -1,5 +1,5 @@
 package me.abacate.animefoda.request
 
-data class RefreshTokenRequestEntity(
+data class RefreshTokenRequest(
     val refreshToken: String,
 )

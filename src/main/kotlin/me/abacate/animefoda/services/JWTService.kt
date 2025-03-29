@@ -1,10 +1,10 @@
 package me.abacate.animefoda.services
 
-import me.abacate.animefoda.controllers.post.LoginRequestEntity
 import me.abacate.animefoda.models.UserModel
 import me.abacate.animefoda.models.UserSession
 import me.abacate.animefoda.repositories.UserRepository
 import me.abacate.animefoda.repositories.UserSessionRepository
+import me.abacate.animefoda.request.LoginRequest
 import me.abacate.animefoda.response.GenTokenResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.BadCredentialsException
@@ -29,7 +29,7 @@ class JWTService(
     @Value("\${jwt.expiration}")
     private val expiresIn: Long = 172800L
     
-    fun generateToken(requestEntity: LoginRequestEntity,userAgent:String): GenTokenResponse {
+    fun generateToken(requestEntity: LoginRequest, userAgent:String): GenTokenResponse {
         val user = userRepository.findByEmail((requestEntity.email))
             ?: throw BadCredentialsException("Invalid email or password")
         if(!user.isLoginCorrect(requestEntity,bCryptPasswordEncoder)){

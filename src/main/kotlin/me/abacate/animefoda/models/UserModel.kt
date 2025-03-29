@@ -1,10 +1,7 @@
 package me.abacate.animefoda.models
 
 import jakarta.persistence.*
-import me.abacate.animefoda.controllers.post.LoginRequestEntity
-import me.abacate.animefoda.enums.RoleEnum
-import org.hibernate.annotations.JdbcTypeCode
-import org.hibernate.type.SqlTypes
+import me.abacate.animefoda.request.LoginRequest
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDate
 import java.util.*
@@ -57,7 +54,7 @@ data class UserModel(
     )
     val roles: MutableSet<Role> = mutableSetOf(),
 ){
-    fun isLoginCorrect(loginRequest:LoginRequestEntity, passwordEncoder: PasswordEncoder):Boolean{
+    fun isLoginCorrect(loginRequest: LoginRequest, passwordEncoder: PasswordEncoder):Boolean{
         return passwordEncoder.matches(loginRequest.password,this.password)
     }
 }

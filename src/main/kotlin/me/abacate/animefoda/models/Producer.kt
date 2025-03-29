@@ -4,8 +4,8 @@ import jakarta.persistence.*
 import java.util.*
 
 @Entity
-@Table(name = "studios", schema = "anime")
-data class StudiosModel(
+@Table(name = "producers", schema = "anime")
+data class Producer(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", columnDefinition = "uuid")
@@ -14,6 +14,6 @@ data class StudiosModel(
     @Column(name = "name", length = 255)
     val name: String = "",
     
-    @Column(name = "description", columnDefinition = "text")
-    val description: String = "",
+    @Column(name = "description", columnDefinition = "text", nullable = true)
+    val description: String? = "",
 )

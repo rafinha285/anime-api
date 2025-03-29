@@ -56,17 +56,44 @@ data class AnimeModel(
     @Column(name = "weekday")
     val weekday: Weekday? = null, // enum que você deve definir
     
-    @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(name = "producers", columnDefinition = "uuid[]")
-    val producers: List<UUID> = emptyList(),
+//    @JdbcTypeCode(SqlTypes.ARRAY)
+//    @Column(name = "producers", columnDefinition = "uuid[]")
+//    val producers: List<UUID> = emptyList(),
+//
+//    @JdbcTypeCode(SqlTypes.ARRAY)
+//    @Column(name = "creators", columnDefinition = "uuid[]")
+//    val creators: List<UUID> = emptyList(),
+//
+//    @JdbcTypeCode(SqlTypes.ARRAY)
+//    @Column(name = "studios", columnDefinition = "uuid[]")
+//    val studios: List<UUID> = emptyList(),
     
-    @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(name = "creators", columnDefinition = "uuid[]")
-    val creators: List<UUID> = emptyList(),
+    @ManyToMany(cascade = [CascadeType.MERGE])
+    @JoinTable(
+        name = "anime_producers",
+        schema = "anime",
+        joinColumns = [JoinColumn(name = "anime_id")],
+        inverseJoinColumns = [JoinColumn(name = "producer_id")]
+    )
+    val producers: MutableSet<Producer> = mutableSetOf(),
     
-    @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(name = "studios", columnDefinition = "uuid[]")
-    val studios: List<UUID> = emptyList(),
+    @ManyToMany(cascade = [CascadeType.MERGE])
+    @JoinTable(
+        name = "anime_creators",
+        schema = "anime",
+        joinColumns = [JoinColumn(name = "anime_id")],
+        inverseJoinColumns = [JoinColumn(name = "creator_id")]
+    )
+    val creators: MutableSet<Creator> = mutableSetOf(),
+    
+    @ManyToMany(cascade = [CascadeType.MERGE])
+    @JoinTable(
+        name = "anime_studios",
+        schema = "anime",
+        joinColumns = [JoinColumn(name = "anime_id")],
+        inverseJoinColumns = [JoinColumn(name = "studio_id")]
+    )
+    val studios: MutableSet<Studio> = mutableSetOf(),
     
     @Enumerated(EnumType.STRING)
     @Column(name = "state")

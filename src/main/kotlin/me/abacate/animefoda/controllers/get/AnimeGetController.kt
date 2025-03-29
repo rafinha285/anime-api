@@ -32,28 +32,28 @@ class AnimeGetController(
         return ApiResponse(success = true, data = anime)
     }
     
-    @GetMapping("/details/{id}")
-    fun getDetail(@PathVariable id: UUID): ApiResponse<AnimeDetailsResponse>{
-        val anime = animeRepository.findById(id).orElseThrow()
-        { AnimeNotFound(id)}
-        val producersId = anime.producers;
-        val creatorsId = anime.creators;
-        val studiosId = anime.studios;
-        
-        val producers:MutableList<ProducersModel> = mutableListOf<ProducersModel>()
-        val studios:MutableList<StudiosModel> = mutableListOf<StudiosModel>()
-        val creators:MutableList<CreatorsModel> = mutableListOf<CreatorsModel>()
-        
-        for(p in producersId){
-            producers.add(producersRepository.getReferenceById(p))
-        }
-        for(p in studiosId){
-            studios.add(studiosRepository.getReferenceById(p))
-        }
-        for (p in creatorsId){
-            creators.add(creatorsRepository.getReferenceById(p))
-        }
-        val response: AnimeDetailsResponse = AnimeDetailsResponse(producers,creators,studios)
-        return ApiResponse<AnimeDetailsResponse>(success = true, data = response)
-    }
+//    @GetMapping("/details/{id}")
+//    fun getDetail(@PathVariable id: UUID): ApiResponse<AnimeDetailsResponse>{
+//        val anime = animeRepository.findById(id).orElseThrow()
+//        { AnimeNotFound(id)}
+//        val producersId = anime.producers;
+//        val creatorsId = anime.creators;
+//        val studiosId = anime.studios;
+//
+//        val producers:MutableList<Producer> = mutableListOf<Producer>()
+//        val studios:MutableList<Studio> = mutableListOf<Studio>()
+//        val creators:MutableList<Creator> = mutableListOf<Creator>()
+//
+//        for(p in producersId){
+//            producers.add(producersRepository.getReferenceById(p))
+//        }
+//        for(p in studiosId){
+//            studios.add(studiosRepository.getReferenceById(p))
+//        }
+//        for (p in creatorsId){
+//            creators.add(creatorsRepository.getReferenceById(p))
+//        }
+//        val response: AnimeDetailsResponse = AnimeDetailsResponse(producers,creators,studios)
+//        return ApiResponse<AnimeDetailsResponse>(success = true, data = response)
+//    }
 }
