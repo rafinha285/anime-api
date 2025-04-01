@@ -1,7 +1,7 @@
 package me.abacate.animefoda.controllers.post
 
 import me.abacate.animefoda.errors.AnimeNotFound
-import me.abacate.animefoda.models.UserAnimelistModel
+import me.abacate.animefoda.models.UserAnimelist
 import me.abacate.animefoda.repositories.AnimeRepository
 import me.abacate.animefoda.repositories.UserAnimelistRepository
 import me.abacate.animefoda.response.ApiResponse
@@ -19,17 +19,17 @@ class AnimelistPostController(
     private val animelistRepository: UserAnimelistRepository,
     private val animeRepository: AnimeRepository
 ) {
-    @PostMapping("new/{id}")
+    @PostMapping("/new/{id}")
     fun addToAnimelist(
-        @PathVariable id: UUID,
+        @PathVariable id: String,
         @AuthenticationPrincipal jwt: Jwt
     ): ApiResponse<String?> {
-        val anime = animeRepository.findById(id).orElseThrow() {
+        val anime = animeRepository.findById(UUID.fromString(id)).orElseThrow() {
             throw AnimeNotFound(id)
         }
-        val animelistModel = UserAnimelistModel(
+        val animelistModel = UserAnimelist(
             anime.id,
-            UUID.fromString(jwt.subject),
+            userId = UUID.fromString(jwt.subject),
         )
         animelistRepository.save(animelistModel)
         return ApiResponse()

@@ -5,7 +5,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "seasons", schema = "anime")
-data class SeasonModel(
+data class Season(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")

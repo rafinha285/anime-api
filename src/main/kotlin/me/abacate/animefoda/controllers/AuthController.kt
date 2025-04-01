@@ -1,18 +1,6 @@
 package me.abacate.animefoda.controllers
 
-import jakarta.servlet.http.Cookie
-import jakarta.servlet.http.HttpServletResponse
-import me.abacate.animefoda.controllers.post.LoginRequestEntity
-import me.abacate.animefoda.errors.BadRequestResponse
-import me.abacate.animefoda.errors.UnauthorizedResponse
-import me.abacate.animefoda.jwt.JWTUtil
 import me.abacate.animefoda.repositories.UserRepository
-import me.abacate.animefoda.response.AuthResponse
-import me.abacate.animefoda.response.OAuth2TokenResponse
-import org.springframework.security.oauth2.jwt.JwtEncoder
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
 
 @RestController

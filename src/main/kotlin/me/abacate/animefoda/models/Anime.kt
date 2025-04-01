@@ -1,20 +1,16 @@
 package me.abacate.animefoda.models
 
 import jakarta.persistence.*
-import me.abacate.animefoda.enums.Language
-import me.abacate.animefoda.enums.Quality
-import me.abacate.animefoda.enums.State
-import me.abacate.animefoda.enums.Weekday
+import me.abacate.animefoda.enums.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import java.time.LocalDate
 import java.time.OffsetDateTime
-import java.util.*
-
+import java.util.UUID
 
 @Entity
 @Table(name = "anime", schema = "anime")
-data class AnimeAllModel(
+data class Anime(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // ou GenerationType.AUTO, conforme sua configuração
     @Column(name = "id", columnDefinition = "uuid")
@@ -60,17 +56,44 @@ data class AnimeAllModel(
     @Column(name = "weekday")
     val weekday: Weekday? = null, // enum que você deve definir
     
-    @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(name = "producers", columnDefinition = "uuid[]")
-    val producers: List<UUID> = emptyList(),
+//    @JdbcTypeCode(SqlTypes.ARRAY)
+//    @Column(name = "producers", columnDefinition = "uuid[]")
+//    val producers: List<UUID> = emptyList(),
+//
+//    @JdbcTypeCode(SqlTypes.ARRAY)
+//    @Column(name = "creators", columnDefinition = "uuid[]")
+//    val creators: List<UUID> = emptyList(),
+//
+//    @JdbcTypeCode(SqlTypes.ARRAY)
+//    @Column(name = "studios", columnDefinition = "uuid[]")
+//    val studios: List<UUID> = emptyList(),
     
-    @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(name = "creators", columnDefinition = "uuid[]")
-    val creators: List<UUID> = emptyList(),
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "anime_producers",
+        schema = "anime",
+        joinColumns = [JoinColumn(name = "anime_id")],
+        inverseJoinColumns = [JoinColumn(name = "producer_id")]
+    )
+    val producers: MutableSet<Producer> = mutableSetOf(),
     
-    @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(name = "studios", columnDefinition = "uuid[]")
-    val studios: List<UUID> = emptyList(),
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "anime_creators",
+        schema = "anime",
+        joinColumns = [JoinColumn(name = "anime_id")],
+        inverseJoinColumns = [JoinColumn(name = "creator_id")]
+    )
+    val creators: MutableSet<Creator> = mutableSetOf(),
+    
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "anime_studios",
+        schema = "anime",
+        joinColumns = [JoinColumn(name = "anime_id")],
+        inverseJoinColumns = [JoinColumn(name = "studio_id")]
+    )
+    val studios: MutableSet<Studio> = mutableSetOf(),
     
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
@@ -80,5 +103,5 @@ data class AnimeAllModel(
     val releaseDate: LocalDate? = null,
     
     @OneToMany(mappedBy = "anime_id", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val seasons: List<SeasonModel> = emptyList()
+    val seasons: List<Season>? = emptyList()
 )
