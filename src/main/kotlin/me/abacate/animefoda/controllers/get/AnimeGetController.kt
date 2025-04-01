@@ -6,7 +6,6 @@ import me.abacate.animefoda.repositories.AnimeRepository
 import me.abacate.animefoda.repositories.CreatorsRepository
 import me.abacate.animefoda.repositories.ProducersRepository
 import me.abacate.animefoda.repositories.StudiosRepository
-import me.abacate.animefoda.response.AnimeDetailsResponse
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -24,10 +23,10 @@ class AnimeGetController(
 ) {
     
     @GetMapping("/all")
-    fun getAnimes():ApiResponse<List<AnimeModel>> = ApiResponse(success = true, data = animeRepository.findAll())
+    fun getAnimes():ApiResponse<List<Anime>> = ApiResponse(success = true, data = animeRepository.findAll())
     
     @GetMapping("/{id}")
-    fun getAnime(@PathVariable id:String):ApiResponse<AnimeModel> {
+    fun getAnime(@PathVariable id:String):ApiResponse<Anime> {
         val anime = animeRepository.findById(UUID.fromString(id)).orElseThrow { AnimeNotFound(id)}
         return ApiResponse(success = true, data = anime)
     }

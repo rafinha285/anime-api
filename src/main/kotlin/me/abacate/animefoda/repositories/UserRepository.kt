@@ -1,13 +1,12 @@
 package me.abacate.animefoda.repositories
 
-import me.abacate.animefoda.enums.RoleEnum
-import me.abacate.animefoda.models.UserModel
+import me.abacate.animefoda.models.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.util.UUID
 
-interface UserRepository:JpaRepository<UserModel, UUID> {
+interface UserRepository:JpaRepository<User, UUID> {
     @Query(
         value = """
             WITH hashed_password AS (
@@ -24,9 +23,9 @@ interface UserRepository:JpaRepository<UserModel, UUID> {
     fun findByEmailAndPassword(
         @Param("email") email: String,
         @Param("password")password: String
-    ): UserModel?
+    ): User?
     
-    fun findByEmail(email: String): UserModel?
+    fun findByEmail(email: String): User?
     
 //    @Query(
 //        value = """

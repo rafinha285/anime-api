@@ -6,4 +6,5 @@ import java.util.*
 
 interface StudiosRepository : JpaRepository<Studio, UUID>{
     fun findByName(name: String): Optional<Studio?>
+    fun findByNameIn(names: List<String>): List<Studio>
 }

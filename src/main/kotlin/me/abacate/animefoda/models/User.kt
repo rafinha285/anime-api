@@ -8,7 +8,7 @@ import java.util.*
 
 @Entity
 @Table(name = "users",schema = "users")
-data class UserModel(
+data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="_id")

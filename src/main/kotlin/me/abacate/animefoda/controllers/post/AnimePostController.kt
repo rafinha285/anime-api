@@ -2,9 +2,8 @@ package me.abacate.animefoda.controllers.post
 
 import me.abacate.animefoda.enums.RoleName
 import me.abacate.animefoda.errors.UnauthorizedResponse
-import me.abacate.animefoda.models.AnimeModel
+import me.abacate.animefoda.models.Anime
 import me.abacate.animefoda.repositories.AnimeRepository
-import me.abacate.animefoda.request.NewAnimeRequest
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.services.AnimeService
 import me.abacate.animefoda.services.UserService
@@ -21,17 +20,19 @@ import java.util.*
 class AnimePostController(
     private val animeService: AnimeService,
     private val userService: UserService,
+    private val animeRepository: AnimeRepository,
 ) {
     @PostMapping("/new")
     fun addAnime(
-        @RequestBody anime: NewAnimeRequest,
+        @RequestBody anime: Anime,
         @AuthenticationPrincipal jwt: Jwt,
     ): ApiResponse<Boolean?> {
         val userId = UUID.fromString(jwt.subject)
         if(!userService.containsRole(userId,RoleName.ROLE_ADMIN) && userService.isSuperUser(userId)) {
             throw UnauthorizedResponse()
         }
-        animeService.createAnimeFromRequest(anime)
+        animeRepository.save(anime)
+//        animeService.createAnimeFromRequest(anime)
         return ApiResponse()
     }
 }

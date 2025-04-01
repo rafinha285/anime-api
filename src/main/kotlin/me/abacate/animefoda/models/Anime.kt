@@ -10,7 +10,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "anime", schema = "anime")
-data class AnimeModel(
+data class Anime(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // ou GenerationType.AUTO, conforme sua configuração
     @Column(name = "id", columnDefinition = "uuid")
@@ -68,7 +68,7 @@ data class AnimeModel(
 //    @Column(name = "studios", columnDefinition = "uuid[]")
 //    val studios: List<UUID> = emptyList(),
     
-    @ManyToMany(cascade = [CascadeType.MERGE])
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinTable(
         name = "anime_producers",
         schema = "anime",
@@ -77,7 +77,7 @@ data class AnimeModel(
     )
     val producers: MutableSet<Producer> = mutableSetOf(),
     
-    @ManyToMany(cascade = [CascadeType.MERGE])
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinTable(
         name = "anime_creators",
         schema = "anime",
@@ -86,7 +86,7 @@ data class AnimeModel(
     )
     val creators: MutableSet<Creator> = mutableSetOf(),
     
-    @ManyToMany(cascade = [CascadeType.MERGE])
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinTable(
         name = "anime_studios",
         schema = "anime",
@@ -103,5 +103,5 @@ data class AnimeModel(
     val releaseDate: LocalDate? = null,
     
     @OneToMany(mappedBy = "anime_id", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val seasons: List<SeasonModel>? = emptyList()
+    val seasons: List<Season>? = emptyList()
 )

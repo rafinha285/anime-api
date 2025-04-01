@@ -15,18 +15,18 @@ class ProducersGetController(
     private val repository: ProducersRepository,
     private val animeRepository: AnimeRepository
 ) {
-    
-    @GetMapping("/g/producers/anime/{id}")
-    fun getProducersFromAnime(@PathVariable id:String): ApiResponse<MutableSet<Producer>> {
-        val anime = animeRepository.findById(UUID.fromString(id))
-            .orElseThrow { AnimeNotFound("") }
-        val producers = mutableListOf<Producer>()
-//        for (p in anime.producers) {
-//            val producer = repository.getReferenceById(p)
-//            producers.add(producer)
-//        }
-        return ApiResponse(data = anime.producers)
-    }
+
+//    @GetMapping("/g/producers/anime/{id}")
+//    fun getProducersFromAnime(@PathVariable id:String): ApiResponse<MutableSet<Producer>> {
+//        val anime = animeRepository.findById(UUID.fromString(id))
+//            .orElseThrow { AnimeNotFound("") }
+//        val producers = mutableListOf<Producer>()
+////        for (p in anime.producers) {
+////            val producer = repository.getReferenceById(p)
+////            producers.add(producer)
+////        }
+////        return ApiResponse(data = anime.producers)
+//    }
     
     @GetMapping("/g/producers/{id}")
     fun getProducers(@PathVariable id: String): ApiResponse<Producer> {

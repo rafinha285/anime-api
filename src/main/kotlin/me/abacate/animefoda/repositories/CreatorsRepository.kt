@@ -7,4 +7,5 @@ import java.util.UUID
 
 interface CreatorsRepository : JpaRepository<Creator, UUID>{
     fun findByName(name: String): Optional<Creator?>
+    fun findByNameIn(names: List<String>): List<Creator>
 }

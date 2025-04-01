@@ -1,7 +1,7 @@
 package me.abacate.animefoda.services
 
 import me.abacate.animefoda.enums.RoleName
-import me.abacate.animefoda.models.UserModel
+import me.abacate.animefoda.models.User
 import me.abacate.animefoda.repositories.RoleRepository
 import me.abacate.animefoda.repositories.UserRepository
 import org.springframework.stereotype.Service
@@ -12,7 +12,7 @@ class UserService(
     private val userRepository: UserRepository,
     private val roleRepository: RoleRepository,
 ) {
-    fun createUser(user: UserModel): UserModel {
+    fun createUser(user: User): User {
         return userRepository.save(user)
     }
     

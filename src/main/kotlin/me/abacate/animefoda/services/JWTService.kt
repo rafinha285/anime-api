@@ -1,6 +1,6 @@
 package me.abacate.animefoda.services
 
-import me.abacate.animefoda.models.UserModel
+import me.abacate.animefoda.models.User
 import me.abacate.animefoda.models.UserSession
 import me.abacate.animefoda.repositories.UserRepository
 import me.abacate.animefoda.repositories.UserSessionRepository
@@ -75,7 +75,7 @@ class JWTService(
         return GenTokenResponse(jwtValue,refreshToken, expiresIn)
     }
     
-    fun generateRefreshToken(user:UserModel,sessionId:UUID):String{
+    fun generateRefreshToken(user:User, sessionId:UUID):String{
         val now = Instant.now()
         
         val refreshExpiration =  now.plusSeconds(7*24*3600)
