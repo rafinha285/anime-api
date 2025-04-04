@@ -14,17 +14,17 @@ class StudiosService (
         return studiosRepository.save(producer)
     }
     
-    fun getIdsFromNames(names: List<String>): List<UUID> {
-        val ids = ArrayList<UUID>()
-        for (name in names) {
-            val producer = studiosRepository.findByName(name)
-            if(!producer.isPresent) {
-                val p = create(name)
-                ids.add(p.id)
-                continue
-            }
-            ids.add(producer.get().id)
-        }
-        return ids
-    }
+//    fun getIdsFromNames(names: List<String>): List<UUID> {
+//        val ids = ArrayList<UUID>()
+//        for (name in names) {
+//            val producer = studiosRepository.findByName(name)
+//            if(!producer.isPresent) {
+//                val p = create(name)
+//                ids.add(p.id)
+//                continue
+//            }
+//            ids.add(producer.get().id)
+//        }
+//        return ids
+//    }
 }

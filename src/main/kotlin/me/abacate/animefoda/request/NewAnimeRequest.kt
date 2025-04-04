@@ -1,11 +1,5 @@
 package me.abacate.animefoda.request
 
-import me.abacate.animefoda.enums.Language
-import me.abacate.animefoda.enums.Quality
-import me.abacate.animefoda.enums.State
-import me.abacate.animefoda.models.Anime
-import java.time.LocalDate
-
 data class NewAnimeRequest(
 //    val name: String,
 //    val name2: String,

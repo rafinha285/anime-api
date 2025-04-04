@@ -95,9 +95,26 @@ data class Anime(
     )
     val studios: MutableSet<Studio> = mutableSetOf(),
     
-    @Enumerated(EnumType.STRING)
-    @Column(name = "state")
-    val state: State? = null, // enum que você deve definir
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "anime_characters",
+        schema = "anime",
+        joinColumns = [JoinColumn(name = "anime_id")],
+        inverseJoinColumns = [JoinColumn(name = "character_id")]
+    )
+    val characters: MutableSet<Character> = mutableSetOf(),
+    
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "anime_state",
+        schema = "anime",
+        joinColumns = [JoinColumn(name = "anime_id")],
+//        inverseJoinColumns = [JoinColumn(name = "state_id")]
+    )
+    var state: State? = null,
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "state")
+//    val state: State? = null, // enum que você deve definir
     
     @Column(name = "releasedate")
     val releaseDate: LocalDate? = null,
