@@ -1,10 +1,10 @@
 package me.abacate.animefoda.repositories
 
-import me.abacate.animefoda.models.CommentModel
+import me.abacate.animefoda.models.Comment
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-interface CommentRepository: JpaRepository<CommentModel, Int>{
-    fun getByPageId(pageId: UUID): MutableList<CommentModel>
+interface CommentRepository: JpaRepository<Comment, Int>{
+    fun getByPageId(pageId: UUID): MutableList<Comment>
     
 }

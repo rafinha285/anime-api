@@ -3,7 +3,7 @@ package me.abacate.animefoda.models
 import jakarta.persistence.*
 import java.time.LocalDate
 import java.util.*
-import me.abacate.animefoda.enums.Role
+import me.abacate.animefoda.enums.RoleEnum
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 
@@ -40,10 +40,18 @@ data class UserModelWithoutPassword(
     @Column(name="superuser", columnDefinition = "boolean")
     val superuser: Boolean = false,
     
-    @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(
-        name = "role",
-        columnDefinition = "role_enum[]"
+//    @JdbcTypeCode(SqlTypes.ARRAY)
+//    @Column(
+//        name = "role",
+//        columnDefinition = "role_enum[]"
+//    )
+//    val roleEnums:List<RoleEnum> =emptyList(),
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "user_roles",
+        schema = "users",
+        joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "role_id")]
     )
-    val roles:List<Role> =emptyList(),
+    val roles: MutableSet<Role> = mutableSetOf(),
 )

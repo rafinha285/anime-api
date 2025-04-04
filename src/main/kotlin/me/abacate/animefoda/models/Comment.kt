@@ -6,7 +6,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "comments", schema = "users")
-data class CommentModel(
+data class Comment(
     @Id
     @SequenceGenerator(name="comments_id_seq", sequenceName="comments_id_seq", allocationSize=1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="comments_id_seq")

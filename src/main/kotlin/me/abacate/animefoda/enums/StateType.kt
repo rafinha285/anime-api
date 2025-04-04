@@ -1,6 +1,6 @@
 package me.abacate.animefoda.enums
 
-enum class State(val label: String) {
+enum class StateType(val label: String) {
     `Lançando`("Lançando"),
     `Hiáto`("Hiáto"),
     Completo("Completo"),

@@ -1,9 +1,7 @@
 package me.abacate.animefoda.errors
 
 import org.springframework.http.HttpStatus
-import org.springframework.web.server.ResponseStatusException
-import java.util.*
+import org.springframework.web.bind.annotation.ResponseStatus
 
-fun AnimeNotFound(id:Any) : ResponseStatusException{
-    return ResponseStatusException(HttpStatus.NOT_FOUND,"Anime $id not found")
-}
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+class AnimeNotFound(id:Any) : RuntimeException("Anime $id not found")

@@ -1,6 +1,6 @@
 package me.abacate.animefoda.controllers.get
 
-import me.abacate.animefoda.models.CommentModel
+import me.abacate.animefoda.models.Comment
 import me.abacate.animefoda.repositories.CommentRepository
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,7 +15,7 @@ class CommentGetController(
     private val commentRepository: CommentRepository,
 ) {
     @GetMapping("/page/{pageId}")
-    fun getCommentsByPage(@PathVariable("pageId") pageId: UUID): ApiResponse<List<CommentModel>> {
+    fun getCommentsByPage(@PathVariable("pageId") pageId: UUID): ApiResponse<List<Comment>> {
         return ApiResponse(data = commentRepository.getByPageId(pageId))
     }
 }
