@@ -23,7 +23,7 @@ class AnimeGetController(
 ) {
     
     @GetMapping("/all")
-    fun getAnimes():ApiResponse<List<Anime>> = ApiResponse(success = true, data = animeRepository.findAll())
+    fun getAnimes():ApiResponse<List<Anime>> = ApiResponse(success = true, data = animeRepository.findByVisibleTrue())
     
     @GetMapping("/{id}")
     fun getAnime(@PathVariable id:String):ApiResponse<Anime> {
