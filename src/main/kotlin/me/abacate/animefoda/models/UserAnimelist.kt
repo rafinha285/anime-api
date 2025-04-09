@@ -10,7 +10,7 @@ import java.util.UUID
 @Entity
 @Table(name = "user_anime_list", schema = "users")
 @IdClass(UserAnimelistId::class)
-data class UserAnimelistModel(
+data class UserAnimelist(
     @Id
     @Column(name = "anime_id")
     val animeId: UUID,

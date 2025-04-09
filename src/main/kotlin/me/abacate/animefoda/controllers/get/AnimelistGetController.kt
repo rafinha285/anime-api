@@ -1,7 +1,7 @@
 package me.abacate.animefoda.controllers.get
 
 import me.abacate.animefoda.errors.AnimeNotFound
-import me.abacate.animefoda.models.UserAnimelistModel
+import me.abacate.animefoda.models.UserAnimelist
 import me.abacate.animefoda.repositories.UserAnimelistRepository
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -20,7 +20,7 @@ class AnimelistGetController(
     @GetMapping("/")
     fun getAnimeListFromToken(
         @AuthenticationPrincipal jwt: Jwt,
-    ): ApiResponse<List<UserAnimelistModel>> {
+    ): ApiResponse<List<UserAnimelist>> {
         println(jwt.subject)
         val animelist = userAnimelistRepository.findByUserId(UUID.fromString(jwt.subject))
         return ApiResponse(data = animelist)
@@ -30,8 +30,8 @@ class AnimelistGetController(
     fun getUserAnimeList(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable id: UUID,
-    ):ApiResponse<UserAnimelistModel>{
-        val anime = userAnimelistRepository.findById(id)?: throw AnimeNotFound(id)
+    ):ApiResponse<UserAnimelist>{
+        val anime = userAnimelistRepository.findById(id)
         return ApiResponse(data = anime.get())
     }
 }
