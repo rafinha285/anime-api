@@ -14,7 +14,7 @@ data class Anime(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // ou GenerationType.AUTO, conforme sua configuração
     @Column(name = "id", columnDefinition = "uuid")
-    val id: UUID = UUID.randomUUID(),
+    val id: UUID? = null,
     
     @Column(name = "averageeptime", nullable = false)
     val averageEptime: Double = 0.0,
@@ -29,9 +29,9 @@ data class Anime(
     @Column(name = "genre", nullable = false, columnDefinition = "text[]")
     val genre: List<String> = emptyList(),
     
-    @Enumerated(EnumType.STRING)
-    @Column(name = "language", nullable = false)
-    val language: Language = Language.Legendado, // enum que você deve definir
+//    @Enumerated(EnumType.STRING)
+    @Column(name = "language",  nullable = false)
+    val language: String? = null, // enum que você deve definir
     
     @Column(name = "malid")
     val malid: Int? = null,
@@ -40,11 +40,11 @@ data class Anime(
     val name: String = "",
     
     @Column(name = "name2", nullable = false, length = 255)
-    val name2: String = "",
+    val name2: String? = "",
     
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     @Column(name = "quality", nullable = false)
-    val quality: Quality = Quality.`1080p`, // enum que você deve definir
+    val quality: String? = null, // enum que você deve definir
     
     @Column(name = "rating")
     val rating: Double? = null,
@@ -52,9 +52,9 @@ data class Anime(
     @Column(name = "visible", nullable = false)
     val visible: Boolean = false,
     
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     @Column(name = "weekday")
-    val weekday: Weekday? = null, // enum que você deve definir
+    val weekday: String? = null, // enum que você deve definir
     
 //    @JdbcTypeCode(SqlTypes.ARRAY)
 //    @Column(name = "producers", columnDefinition = "uuid[]")
@@ -119,6 +119,12 @@ data class Anime(
     @Column(name = "releasedate")
     val releaseDate: LocalDate? = null,
     
-    @OneToMany(mappedBy = "anime_id", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val seasons: List<Season>? = emptyList()
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "seasons",
+        schema = "anime",
+        joinColumns = [JoinColumn(name = "anime_id")],
+        inverseJoinColumns = [JoinColumn(name = "id")]
+    )
+    val seasons: MutableSet<Season> = mutableSetOf(),
 )
