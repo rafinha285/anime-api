@@ -17,7 +17,7 @@ data class Anime(
     val id: UUID? = null,
     
     @Column(name = "averageeptime", nullable = false)
-    val averageEptime: Double = 0.0,
+    val averageEpTime: Double = 0.0,
     
     @Column(name = "date_added", nullable = false)
     val dateAdded: OffsetDateTime = OffsetDateTime.now(),
