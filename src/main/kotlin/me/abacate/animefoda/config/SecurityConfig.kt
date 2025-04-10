@@ -19,7 +19,9 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
 @Configuration
-class SecurityConfig {
+class SecurityConfig(
+    val rsaLoaders: RSALoaders
+) {
     
     @Value("\${spring.security.oauth2.resourceserver.jwt.secret}")
     private lateinit var secret: String
@@ -32,10 +34,10 @@ class SecurityConfig {
     private lateinit var publicKeyPath: String;
     
     @Bean
-    fun rsaPrivateKey(): RSAPrivateKey = loadRSAPrivateKey(privateKeyPath)
+    fun rsaPrivateKey(): RSAPrivateKey = rsaLoaders.loadRSAPrivateKey(privateKeyPath)
     
     @Bean
-    fun rsaPublicKey(): RSAPublicKey = loadRSAPublicKey(publicKeyPath)
+    fun rsaPublicKey(): RSAPublicKey = rsaLoaders.loadRSAPublicKey(publicKeyPath)
     
     //filtro de oauth2 para rotas especificas
     @Bean
