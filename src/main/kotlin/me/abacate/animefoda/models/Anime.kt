@@ -68,7 +68,7 @@ data class Anime(
 //    @Column(name = "studios", columnDefinition = "uuid[]")
 //    val studios: List<UUID> = emptyList(),
     
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @OneToMany(cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
     @JoinTable(
         name = "anime_producers",
         schema = "anime",
@@ -77,7 +77,7 @@ data class Anime(
     )
     val producers: MutableSet<Producer> = mutableSetOf(),
     
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @OneToMany(cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
     @JoinTable(
         name = "anime_creators",
         schema = "anime",
@@ -86,7 +86,7 @@ data class Anime(
     )
     val creators: MutableSet<Creator> = mutableSetOf(),
     
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @OneToMany(cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
     @JoinTable(
         name = "anime_studios",
         schema = "anime",
@@ -104,7 +104,7 @@ data class Anime(
     )
     val characters: MutableSet<Character> = mutableSetOf(),
     
-    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @OneToOne(cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
     @JoinTable(
         name = "anime_state",
         schema = "anime",

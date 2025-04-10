@@ -1,19 +1,15 @@
 package me.abacate.animefoda.controllers.post
 
-import me.abacate.animefoda.enums.Language
-import me.abacate.animefoda.enums.Quality
 import me.abacate.animefoda.enums.RoleName
+import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.models.Anime
+import me.abacate.animefoda.models.Creator
 import me.abacate.animefoda.models.Producer
-import me.abacate.animefoda.models.State
-import me.abacate.animefoda.repositories.AnimeRepository
-import me.abacate.animefoda.repositories.ProducersRepository
-import me.abacate.animefoda.repositories.StateRepository
+import me.abacate.animefoda.models.Studio
+import me.abacate.animefoda.repositories.*
 import me.abacate.animefoda.request.NewAnimeRequest
 import me.abacate.animefoda.response.ApiResponse
-import me.abacate.animefoda.services.AnimeAssociationService
-import me.abacate.animefoda.services.AnimeService
 import me.abacate.animefoda.services.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
@@ -26,12 +22,12 @@ import java.util.*
 @RestController
 @RequestMapping("/p/anime/")
 class AnimePostController(
-    private val animeService: AnimeService,
     private val userService: UserService,
     private val animeRepository: AnimeRepository,
     private val stateRepository: StateRepository,
-    private val animeAssociationService: AnimeAssociationService,
     private val producersRepository: ProducersRepository,
+    private val creatorsRepository: CreatorsRepository,
+    private val studiosRepository: StudiosRepository,
 ) {
     @PostMapping("/new")
     fun addAnime(
@@ -43,11 +39,19 @@ class AnimePostController(
             throw UnauthorizedResponse()
         }
         
-        val state = State(name = animeRequest.state)
+        val state = stateRepository.findByName(animeRequest.state).orElseThrow {
+            throw BadRequestResponse("State not found")
+        }
         
-//        val managedProducers = animeRequest.producers.map { producer ->
-//            producersRepository.findByName(producer) ?: producersRepository.save(Producer(name = producer))
-//        }.toMutableSet()
+        val managedProducers:MutableSet<Producer> = animeRequest.producers.map { producer ->
+            producersRepository.findByName(producer).get() ?: producersRepository.save(Producer(name = producer))
+        }.toMutableSet()
+        val managedCreators:MutableSet<Creator> = animeRequest.creators.map { producer ->
+            creatorsRepository.findByName(producer).get() ?: creatorsRepository.save(Creator(name = producer))
+        }.toMutableSet()
+        val managedStudios:MutableSet<Studio> = animeRequest.studios.map { producer ->
+            studiosRepository.findByName(producer).get() ?: studiosRepository.save(Studio(name = producer))
+        }.toMutableSet()
 //        val creators = animeAssociationService.getCreatorsByIds(animeRequest.creators).toMutableSet()
 //        val studios = animeAssociationService.getStudiosByIds(animeRequest.studios).toMutableSet()
         
@@ -66,13 +70,16 @@ class AnimePostController(
             genre = animeRequest.gens,
             releaseDate = animeRequest.releasedate,
             quality = animeRequest.quality,
-//            language =languageEnum,
+            language =animeRequest.language,
             state = state,
+            producers = managedProducers,
+            creators = managedCreators,
+            studios = managedStudios,
         )
         
         
         
-        val animeSave = animeRepository.save(anime)
+        animeRepository.save(anime)
         
 //        animeService.createAnimeFromRequest(anime)
         return ApiResponse(message = "Anime ${anime.id} created")
