@@ -22,7 +22,7 @@ class AnimeService(
     private val creatorsRepository: CreatorsRepository,
     private val studiosRepository: StudiosRepository,
 ) {
-    
+    //produtores
     fun addProducerToAnime(id: UUID, prod: AddProducersRequest): Anime{
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
@@ -32,7 +32,15 @@ class AnimeService(
         anime.producers.add(producer);
         return animeRepository.save(anime);
     }
+    fun deleteProducer(id: UUID, prod:String): Anime {
+        val anime = animeRepository.findById(id)
+        .orElseThrow { RuntimeException("Anime not found!") }
+        val producer = producersRepository.findByName(prod).orElseThrow { RuntimeException("Producer not found!") }
+        anime.producers.remove(producer);
+        return animeRepository.save(anime);
+    }
     
+    //criadores
     fun addCreatorToAnime(id: UUID, crea: AddProducersRequest): Anime{
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
@@ -41,13 +49,28 @@ class AnimeService(
         anime.creators.add(producer);
         return animeRepository.save(anime);
     }
+    fun deleteCreator(id: UUID, prod:String): Anime {
+        val anime = animeRepository.findById(id)
+            .orElseThrow { RuntimeException("Anime not found!") }
+        val producer = creatorsRepository.findByName(prod).orElseThrow { RuntimeException("Producer not found!") }
+        anime.creators.remove(producer);
+        return animeRepository.save(anime);
+    }
     
+    //studios
     fun addStudioToAnime(id: UUID, stud: AddProducersRequest): Anime{
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
         val producer: Studio = studiosRepository.findByName(stud.name).orElseThrow { RuntimeException("Producer not found!") };
         
         anime.studios.add(producer);
+        return animeRepository.save(anime);
+    }
+    fun deleteStudio(id: UUID, prod:String): Anime {
+        val anime = animeRepository.findById(id)
+            .orElseThrow { RuntimeException("Anime not found!") }
+        val producer = studiosRepository.findByName(prod).orElseThrow { RuntimeException("Producer not found!") }
+        anime.studios.remove(producer);
         return animeRepository.save(anime);
     }
     
