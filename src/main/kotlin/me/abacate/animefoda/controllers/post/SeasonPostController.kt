@@ -25,7 +25,7 @@ class SeasonPostController(
     fun newSeason(
         @RequestBody body: NewSeasonRequest,
         @AuthenticationPrincipal jwt: Jwt
-    ):ApiResponse<String?> {
+    ):ApiResponse<Season> {
         val userUUID = UUID.fromString(jwt.subject)
         if(!userService.containsRole(userUUID,RoleName.ROLE_ADMIN)){
             throw UnauthorizedResponse()
@@ -37,6 +37,7 @@ class SeasonPostController(
             animeId = body.anime_id,
         )
         seasonRepository.save(season)
-        return ApiResponse()
+//        val seasons = seasonRepository.findByAnimeId(body.anime_id).toList()
+        return ApiResponse(data = season,message = "Season ${season.id} created")
     }
 }

@@ -12,7 +12,7 @@ data class NewAnimeRequest(
     val studios: List<String>,
     val creators: List<String>,
     val gens: List<String>,
-    val releasedate: LocalDate,
+    val releaseDate: LocalDate,
     val quality: String,
     val state: StateName,
     val language: String,

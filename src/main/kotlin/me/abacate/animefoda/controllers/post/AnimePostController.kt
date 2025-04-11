@@ -33,9 +33,8 @@ class AnimePostController(
     fun addAnime(
         @RequestBody animeRequest: NewAnimeRequest,
         @AuthenticationPrincipal jwt: Jwt,
-    ): ApiResponse<Boolean?> {
-        val userId = UUID.fromString(jwt.subject)
-        if(!userService.containsRole(userId,RoleName.ROLE_ADMIN) && userService.isSuperUser(userId)) {
+    ): ApiResponse<Anime> {
+        if(!userService.isAdminAndSuperUser(UUID.fromString(jwt.subject))) {
             throw UnauthorizedResponse()
         }
         
@@ -68,7 +67,7 @@ class AnimePostController(
             name2 = animeRequest.name2,
             description = animeRequest.description,
             genre = animeRequest.gens,
-            releaseDate = animeRequest.releasedate,
+            releaseDate = animeRequest.releaseDate,
             quality = animeRequest.quality,
             language =animeRequest.language,
             state = state,
@@ -82,6 +81,6 @@ class AnimePostController(
         animeRepository.save(anime)
         
 //        animeService.createAnimeFromRequest(anime)
-        return ApiResponse(message = "Anime ${anime.id} created")
+        return ApiResponse(data = anime,message = "Anime ${anime.id} created")
     }
 }
