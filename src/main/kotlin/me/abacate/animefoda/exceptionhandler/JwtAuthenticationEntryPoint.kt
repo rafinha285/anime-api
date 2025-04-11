@@ -1,4 +1,4 @@
-package me.abacate.animefoda.exceptionHandler
+package me.abacate.animefoda.exceptionhandler
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import jakarta.servlet.http.HttpServletRequest

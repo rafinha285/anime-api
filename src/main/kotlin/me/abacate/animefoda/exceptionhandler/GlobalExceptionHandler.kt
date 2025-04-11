@@ -1,4 +1,4 @@
-package me.abacate.animefoda.exceptionHandler
+package me.abacate.animefoda.exceptionhandler
 
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.http.HttpStatus

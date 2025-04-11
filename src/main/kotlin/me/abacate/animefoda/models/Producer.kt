@@ -9,9 +9,9 @@ data class Producer(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", columnDefinition = "uuid")
-    val id: UUID? = UUID.randomUUID(),
+    val id: UUID? = null,
     
-    @Column(name = "name", length = 255)
+    @Column(name = "name", length = 255, nullable = false)
     val name: String? = null,
     
     @Column(name = "description", columnDefinition = "text", nullable = true)

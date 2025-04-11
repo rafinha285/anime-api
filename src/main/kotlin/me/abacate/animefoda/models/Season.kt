@@ -8,15 +8,15 @@ import java.util.UUID
 data class Season(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     val id: UUID? = null,
     
-    @Column(name = "name", length = 255)
+    @Column(name = "name", length = 255, nullable = false)
     val name: String? = null,
     
-    @Column(name = "anime_id",)
-    val anime_id: UUID? = null,
+    @Column(name = "anime_id", nullable = false)
+    val animeId: UUID? = null,
     
-    @Column(name = "index")
+    @Column(name = "index", nullable = false)
     val index: Int? = null,
 )

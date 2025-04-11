@@ -27,6 +27,11 @@ class UserService(
         userRepository.save(user)
     }
     
+    fun isAdminAndSuperUser(userId:UUID):Boolean{
+        return containsRole(userId,RoleName.ROLE_ADMIN) && isSuperUser(userId);
+    }
+    
+    
     fun containsRole(userId: UUID, roleName: RoleName): Boolean {
         val user = userRepository.findById(userId)
             .orElseThrow { IllegalArgumentException("User with id $userId was not found") }
