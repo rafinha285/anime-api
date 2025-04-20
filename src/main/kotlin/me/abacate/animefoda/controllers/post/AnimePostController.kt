@@ -13,10 +13,8 @@ import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.services.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.client.HttpClientErrorException.NotFound
 import java.util.*
 
 @RestController
@@ -100,5 +98,26 @@ class AnimePostController(
         
 //        animeService.createAnimeFromRequest(anime)
         return ApiResponse(data = anime,message = "Anime ${anime.id} created")
+    }
+    
+    @PostMapping("/update/{id}")
+    fun update(
+        @RequestBody animeRequest: NewAnimeRequest,
+        @PathVariable id: UUID,
+        @AuthenticationPrincipal jwt: Jwt,
+    ):ApiResponse<Anime>{
+        
+        if(!userService.containsRole(UUID.fromString(jwt.subject),RoleName.ROLE_ADMIN)){
+            throw UnauthorizedResponse()
+        }
+        
+        val anime = animeRepository.findById(id).orElseThrow {
+            throw BadRequestResponse("Anime not found")
+        }
+        
+        
+        
+        
+        return ApiResponse()
     }
 }

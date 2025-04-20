@@ -3,18 +3,15 @@ package me.abacate.animefoda.models
 import jakarta.persistence.*
 import java.time.LocalDate
 import java.util.*
-import me.abacate.animefoda.enums.RoleEnum
-import org.hibernate.annotations.JdbcTypeCode
-import org.hibernate.type.SqlTypes
 
 
 @Entity
 @Table(name = "users", schema = "users")
-data class UserModelWithoutPassword(
+data class UserWithoutPassword(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="_id")
-    val id: UUID = UUID.randomUUID(),
+    val id: UUID? = null,
     
     @Column(name="name",length=255)
     val name: String = "",
