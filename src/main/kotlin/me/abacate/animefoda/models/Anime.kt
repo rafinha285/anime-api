@@ -33,9 +33,6 @@ data class Anime(
     @Column(name = "language",  nullable = false)
     val language: String? = null, // enum que você deve definir
     
-    @Column(name = "malid")
-    val malid: Int? = null,
-    
     @Column(name = "name", nullable = false, length = 255)
     val name: String = "",
     

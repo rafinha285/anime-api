@@ -16,4 +16,5 @@ data class NewAnimeRequest(
     val quality: String,
     val state: StateName,
     val language: String,
+    val visible: Boolean?,
 )

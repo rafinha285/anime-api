@@ -43,13 +43,31 @@ class AnimePostController(
         }
         
         val managedProducers:MutableSet<Producer> = animeRequest.producers.map { producer ->
-            producersRepository.findByName(producer).get() ?: producersRepository.save(Producer(name = producer))
+            producersRepository.findByName(producer)
+                .orElseGet {
+                    producersRepository.findByNameIgnoreCase(producer) // Busca case-insensitive
+                        .orElseGet {
+                            producersRepository.save(Producer(name = producer))
+                        }
+                }
         }.toMutableSet()
         val managedCreators:MutableSet<Creator> = animeRequest.creators.map { producer ->
-            creatorsRepository.findByName(producer).get() ?: creatorsRepository.save(Creator(name = producer))
+            creatorsRepository.findByName(producer)
+                .orElseGet {
+                    creatorsRepository.findByNameIgnoreCase(producer)
+                        .orElseGet {
+                            creatorsRepository.save(Creator(name = producer))
+                        }
+                }
         }.toMutableSet()
         val managedStudios:MutableSet<Studio> = animeRequest.studios.map { producer ->
-            studiosRepository.findByName(producer).get() ?: studiosRepository.save(Studio(name = producer))
+            studiosRepository.findByName(producer)
+                .orElseGet {
+                    studiosRepository.findByNameIgnoreCase(producer)
+                        .orElseGet {
+                            studiosRepository.save(Studio(name = producer))
+                        }
+                }
         }.toMutableSet()
 //        val creators = animeAssociationService.getCreatorsByIds(animeRequest.creators).toMutableSet()
 //        val studios = animeAssociationService.getStudiosByIds(animeRequest.studios).toMutableSet()
