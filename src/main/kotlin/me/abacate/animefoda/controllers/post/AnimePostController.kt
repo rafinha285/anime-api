@@ -14,7 +14,6 @@ import me.abacate.animefoda.services.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.client.HttpClientErrorException.NotFound
 import java.util.*
 
 @RestController
@@ -40,7 +39,7 @@ class AnimePostController(
             throw BadRequestResponse("State not found")
         }
         
-        val managedProducers:MutableSet<Producer> = animeRequest.producers.map { producer ->
+        val managedProducers:MutableSet<Producer> = animeRequest.producers?.map { producer ->
             producersRepository.findByName(producer)
                 .orElseGet {
                     producersRepository.findByNameIgnoreCase(producer) // Busca case-insensitive
@@ -48,8 +47,8 @@ class AnimePostController(
                             producersRepository.save(Producer(name = producer))
                         }
                 }
-        }.toMutableSet()
-        val managedCreators:MutableSet<Creator> = animeRequest.creators.map { producer ->
+        }?.toMutableSet() ?: mutableSetOf()
+        val managedCreators:MutableSet<Creator> = animeRequest.creators?.map { producer ->
             creatorsRepository.findByName(producer)
                 .orElseGet {
                     creatorsRepository.findByNameIgnoreCase(producer)
@@ -57,8 +56,8 @@ class AnimePostController(
                             creatorsRepository.save(Creator(name = producer))
                         }
                 }
-        }.toMutableSet()
-        val managedStudios:MutableSet<Studio> = animeRequest.studios.map { producer ->
+        }?.toMutableSet() ?: mutableSetOf()
+        val managedStudios:MutableSet<Studio> = animeRequest.studios?.map { producer ->
             studiosRepository.findByName(producer)
                 .orElseGet {
                     studiosRepository.findByNameIgnoreCase(producer)
@@ -66,7 +65,7 @@ class AnimePostController(
                             studiosRepository.save(Studio(name = producer))
                         }
                 }
-        }.toMutableSet()
+        }?.toMutableSet() ?: mutableSetOf()
 //        val creators = animeAssociationService.getCreatorsByIds(animeRequest.creators).toMutableSet()
 //        val studios = animeAssociationService.getStudiosByIds(animeRequest.studios).toMutableSet()
         
@@ -82,7 +81,7 @@ class AnimePostController(
             name = animeRequest.name,
             name2 = animeRequest.name2,
             description = animeRequest.description,
-            genre = animeRequest.gens,
+            genre = animeRequest.genre,
             releaseDate = animeRequest.releaseDate,
             quality = animeRequest.quality,
             language =animeRequest.language,
@@ -115,9 +114,19 @@ class AnimePostController(
             throw BadRequestResponse("Anime not found")
         }
         
+        anime.name = animeRequest.name
+        anime.name2 = animeRequest.name2
+        anime.description = animeRequest.description
+        anime.genre = animeRequest.genre
+        anime.releaseDate = animeRequest.releaseDate
+        anime.quality = animeRequest.quality
+        anime.language = animeRequest.language
+        anime.state = stateRepository.findByName(animeRequest.state).get()
+        anime.visible = animeRequest.visible?: false
+        anime.weekday = animeRequest.weekday
         
+        animeRepository.save(anime)
         
-        
-        return ApiResponse()
+        return ApiResponse(data = anime,message = "Anime ${anime.id} updated")
     }
 }
