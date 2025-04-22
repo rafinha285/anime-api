@@ -1,5 +1,6 @@
 package me.abacate.animefoda.controllers.post
 
+import jakarta.transaction.Transactional
 import me.abacate.animefoda.enums.RoleName
 import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.errors.UnauthorizedResponse
@@ -14,6 +15,7 @@ import me.abacate.animefoda.services.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.client.HttpClientErrorException.NotFound
 import java.util.*
 
 @RestController
@@ -99,6 +101,7 @@ class AnimePostController(
         return ApiResponse(data = anime,message = "Anime ${anime.id} created")
     }
     
+    @Transactional
     @PostMapping("/update/{id}")
     fun update(
         @RequestBody animeRequest: NewAnimeRequest,
