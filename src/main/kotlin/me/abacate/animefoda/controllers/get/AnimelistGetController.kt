@@ -31,7 +31,7 @@ class AnimelistGetController(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable id: UUID,
     ):ApiResponse<UserAnimelist>{
-        val anime = userAnimelistRepository.findById(id)?: throw AnimeNotFound(id)
+        val anime = userAnimelistRepository.findById(id)
         return ApiResponse(data = anime.get())
     }
 }

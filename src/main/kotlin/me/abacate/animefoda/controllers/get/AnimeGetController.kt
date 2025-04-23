@@ -1,5 +1,6 @@
 package me.abacate.animefoda.controllers.get
 
+import me.abacate.animefoda.enums.RoleName
 import me.abacate.animefoda.errors.AnimeNotFound
 import me.abacate.animefoda.models.*
 import me.abacate.animefoda.repositories.AnimeRepository
@@ -7,6 +8,9 @@ import me.abacate.animefoda.repositories.CreatorsRepository
 import me.abacate.animefoda.repositories.ProducersRepository
 import me.abacate.animefoda.repositories.StudiosRepository
 import me.abacate.animefoda.response.ApiResponse
+import me.abacate.animefoda.services.UserService
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -19,11 +23,26 @@ class AnimeGetController(
     private val animeRepository: AnimeRepository,
     private val producersRepository: ProducersRepository,
     private val studiosRepository: StudiosRepository,
-    private val creatorsRepository: CreatorsRepository
+    private val creatorsRepository: CreatorsRepository,
+    private val userService: UserService
 ) {
     
     @GetMapping("/all")
-    fun getAnimes():ApiResponse<List<Anime>> = ApiResponse(success = true, data = animeRepository.findAll())
+    fun getAnimes(
+        @AuthenticationPrincipal jwt: Jwt?,
+    ):ApiResponse<List<Anime>> {
+        val isAdmin = jwt?.subject?.let { subject ->
+            try {
+                userService.containsRole(UUID.fromString(subject), RoleName.ROLE_ADMIN)
+            } catch (e: IllegalArgumentException) {
+                false
+            }
+        } ?: false
+        return if (isAdmin)
+            ApiResponse(message = "Admin access", data = animeRepository.findAll())
+        else
+            ApiResponse(data = animeRepository.findByVisibleTrue())
+    }
     
     @GetMapping("/{id}")
     fun getAnime(@PathVariable id:String):ApiResponse<Anime> {

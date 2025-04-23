@@ -14,7 +14,7 @@ class StateDataLoader(
 ) {
     @Bean
     fun loadStateData() = ApplicationRunner{
-        StateName.values().forEach { stateName ->
+        StateName.entries.forEach { stateName ->
             if(!stateRepository.existsByName(stateName)){
                 stateRepository.save(State(name = stateName))
             }
