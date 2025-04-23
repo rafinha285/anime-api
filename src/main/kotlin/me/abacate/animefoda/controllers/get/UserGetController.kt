@@ -1,12 +1,10 @@
 package me.abacate.animefoda.controllers.get
 
 import me.abacate.animefoda.repositories.UserAnimelistRepository
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
 import me.abacate.animefoda.enums.RoleName
 import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.errors.UserNotFound
-import me.abacate.animefoda.models.UserModelWithoutPassword
+import me.abacate.animefoda.models.UserWithoutPassword
 import me.abacate.animefoda.repositories.UserRepositoryWithoutPassword
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.services.UserService
@@ -47,7 +45,7 @@ class UserGetController(
     }
     
     @GetMapping("/{id}")
-    fun getUser(@PathVariable id: UUID): ApiResponse<UserModelWithoutPassword> {
+    fun getUser(@PathVariable id: UUID): ApiResponse<UserWithoutPassword> {
         val user = userRepositoryWithoutPassword.findById(id).orElseThrow() { UserNotFound(id)}
         return ApiResponse(success = true, data = user)
     }
@@ -55,7 +53,7 @@ class UserGetController(
     @GetMapping("/")
     fun getUserFromToken(
         @AuthenticationPrincipal jwt:Jwt
-    ): ApiResponse<UserModelWithoutPassword> {
+    ): ApiResponse<UserWithoutPassword> {
         val user = userRepositoryWithoutPassword.findById(UUID.fromString(jwt.subject)).orElseThrow()
         return ApiResponse(data = user)
     }

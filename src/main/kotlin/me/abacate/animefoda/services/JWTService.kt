@@ -61,16 +61,20 @@ class JWTService(
         
         val jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims))
         
-        val userSession = UserSession(
-            sessionId = refreshSessionId,
-            userId = user.id,
-            userAgent = userAgent,
-            webGlRenderer = requestEntity.WebGLRenderer,
-            webGlVendor = requestEntity.WebGLVendor,
-            timeZone = requestEntity.timeZone,
-        )
+        val userSession = user.id?.let {
+            UserSession(
+                sessionId = refreshSessionId,
+                userId = it,
+                userAgent = userAgent,
+                webGlRenderer = requestEntity.WebGLRenderer,
+                webGlVendor = requestEntity.WebGLVendor,
+                timeZone = requestEntity.timeZone,
+            )
+        }
         
-        userSessionRepository.save(userSession)
+        if (userSession != null) {
+            userSessionRepository.save(userSession)
+        }
         
         return GenTokenResponse(jwtValue,refreshToken, expiresIn)
     }

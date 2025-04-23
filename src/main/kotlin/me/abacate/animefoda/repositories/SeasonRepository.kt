@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param
 import java.util.UUID
 
 interface SeasonRepository: JpaRepository<Season, UUID> {
-    @Query(value = "SELECT s FROM Season s WHERE s.anime_id = :id")
-    fun findByAnimeId(@Param("id") id: UUID): List<Season>
+//    @Query(value = "SELECT s FROM Season s WHERE s.anime_id = :id")
+    fun findByAnimeId(animeId:UUID): List<Season>
 }

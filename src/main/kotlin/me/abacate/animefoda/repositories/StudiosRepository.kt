@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface StudiosRepository : JpaRepository<Studio, UUID>{
-    fun findByName(name: String): Optional<Studio?>
+    fun findByName(name: String): Optional<Studio>
+    fun findByNameIgnoreCase(name: String): Optional<Studio>
     fun findByNameIn(names: List<String>): List<Studio>
 }

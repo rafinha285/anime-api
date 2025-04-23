@@ -12,12 +12,12 @@ import java.util.UUID
 @IdClass(UserAnimelistId::class)
 data class UserAnimelist(
     @Id
-    @Column(name = "anime_id")
-    val animeId: UUID,
+    @Column(name = "anime_id", nullable = false)
+    val animeId: UUID? = null,
     
     @Id
-    @Column(name = "user_id")
-    val userId: UUID,
+    @Column(name = "user_id", nullable = false)
+    val userId: UUID? = null,
     
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "users.status_enum")
