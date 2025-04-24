@@ -28,11 +28,18 @@ class AnimeService(
     private val stateRepository: StateRepository,
 ) {
     //produtores
+    @AdminAction("ADD PRODUCER TO ANIME id={id} prodName={prod.name}")
     fun addProducerToAnime(id: UUID, prod: AddProducersRequest): Anime{
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
         println(prod)
-        val producer: Producer = producersRepository.findByName(prod.name).orElseThrow { RuntimeException("Producer not found!") };
+        val producer: Producer = producersRepository.findByName(prod.name)
+            .orElseGet {
+                producersRepository.findByNameIgnoreCase(prod.name) // Busca case-insensitive
+                    .orElseGet {
+                        producersRepository.save(Producer(name = prod.name))
+                    }
+            }
         
         anime.producers.add(producer);
         return animeRepository.save(anime);
@@ -46,10 +53,17 @@ class AnimeService(
     }
     
     //criadores
+    @AdminAction("ADD CREATOR TO ANIME animeId={id} prodName={crea.name}")
     fun addCreatorToAnime(id: UUID, crea: AddProducersRequest): Anime{
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
-        val producer: Creator = creatorsRepository.findByName(crea.name).orElseThrow { RuntimeException("Producer not found!") };
+        val producer: Creator = creatorsRepository.findByName(crea.name)
+            .orElseGet {
+                creatorsRepository.findByNameIgnoreCase(crea.name) // Busca case-insensitive
+                    .orElseGet {
+                        creatorsRepository.save(Creator(name = crea.name))
+                    }
+            }
         
         anime.creators.add(producer);
         return animeRepository.save(anime);
@@ -63,10 +77,17 @@ class AnimeService(
     }
     
     //studios
+    @AdminAction("ADD STUDIO TO ANIME animeId={id} prodName={stud.name}")
     fun addStudioToAnime(id: UUID, stud: AddProducersRequest): Anime{
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
-        val producer: Studio = studiosRepository.findByName(stud.name).orElseThrow { RuntimeException("Producer not found!") };
+        val producer: Studio = studiosRepository.findByName(stud.name)
+            .orElseGet {
+                studiosRepository.findByNameIgnoreCase(stud.name)
+                    .orElseGet {
+                        studiosRepository.save(Studio(name = stud.name))
+                    }
+            }
         
         anime.studios.add(producer);
         return animeRepository.save(anime);
@@ -89,7 +110,6 @@ class AnimeService(
     //create anime
     @AdminAction("INSERT ANIME")
     fun insertAnime(animeRequest: NewAnimeRequest): Anime {
-        println(animeRequest);
         val state = stateRepository.findByName(animeRequest.state).orElseThrow {
             throw BadRequestResponse("State not found")
         }

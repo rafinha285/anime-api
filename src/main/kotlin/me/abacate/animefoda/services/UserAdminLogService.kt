@@ -15,7 +15,13 @@ class UserAdminLogService(
     private val userRepository: UserRepository
 ) {
     fun logAdminCommand(command: String){
-        val currentJwt = SecurityContextHolder.getContext().authentication.principal as Jwt
+        val authentication = SecurityContextHolder.getContext().authentication
+        
+        if (authentication == null || authentication.principal !is Jwt) {
+            throw IllegalStateException("Usuário não autenticado via JWT")
+        }
+        
+        val currentJwt = authentication.principal as Jwt
         
         val user = userRepository.findById(UUID.fromString(currentJwt.subject)).orElseThrow { UnauthorizedResponse() }
         val sessionId = UUID.fromString(currentJwt.getClaim<String>("session_id"))

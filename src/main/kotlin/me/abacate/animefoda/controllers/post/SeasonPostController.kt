@@ -1,5 +1,6 @@
 package me.abacate.animefoda.controllers.post
 
+import me.abacate.animefoda.annotation.AdminAction
 import me.abacate.animefoda.enums.RoleName
 import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.services.JWTService
@@ -22,6 +23,7 @@ class SeasonPostController(
     private val userService: UserService
 ) {
     @PostMapping("/new")
+    @AdminAction("CREATE SEASON animeId={body.anime_id}")
     fun newSeason(
         @RequestBody body: NewSeasonRequest,
         @AuthenticationPrincipal jwt: Jwt
@@ -30,14 +32,13 @@ class SeasonPostController(
         if(!userService.containsRole(userUUID,RoleName.ROLE_ADMIN)){
             throw UnauthorizedResponse()
         }
-//            jwtUtil.checkToken(token, request, response)
+        
         val season = Season(
             name = body.name,
             index = body.index,
             animeId = body.anime_id,
         )
         seasonRepository.save(season)
-//        val seasons = seasonRepository.findByAnimeId(body.anime_id).toList()
         return ApiResponse(data = season,message = "Season ${season.id} created")
     }
 }

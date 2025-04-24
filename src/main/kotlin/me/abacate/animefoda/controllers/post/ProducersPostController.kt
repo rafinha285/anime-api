@@ -1,5 +1,6 @@
 package me.abacate.animefoda.controllers.post
 
+import me.abacate.animefoda.annotation.AdminAction
 import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.models.Producer
 import me.abacate.animefoda.request.AddProducersRequest
