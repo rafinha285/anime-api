@@ -1,5 +1,7 @@
 package me.abacate.animefoda.services
 
+import me.abacate.animefoda.annotation.AdminAction
+import me.abacate.animefoda.errors.BadRequestResponse
 import org.springframework.transaction.annotation.Transactional
 import me.abacate.animefoda.models.Anime
 import me.abacate.animefoda.models.Creator
@@ -8,8 +10,10 @@ import me.abacate.animefoda.models.Studio
 import me.abacate.animefoda.repositories.AnimeRepository
 import me.abacate.animefoda.repositories.CreatorsRepository
 import me.abacate.animefoda.repositories.ProducersRepository
+import me.abacate.animefoda.repositories.StateRepository
 import me.abacate.animefoda.repositories.StudiosRepository
 import me.abacate.animefoda.request.AddProducersRequest
+import me.abacate.animefoda.request.NewAnimeRequest
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -21,6 +25,7 @@ class AnimeService(
     private val producersRepository: ProducersRepository,
     private val creatorsRepository: CreatorsRepository,
     private val studiosRepository: StudiosRepository,
+    private val stateRepository: StateRepository,
 ) {
     //produtores
     fun addProducerToAnime(id: UUID, prod: AddProducersRequest): Anime{
@@ -72,6 +77,67 @@ class AnimeService(
         val producer = studiosRepository.findByName(prod).orElseThrow { RuntimeException("Producer not found!") }
         anime.studios.remove(producer);
         return animeRepository.save(anime);
+    }
+    
+    
+    //delete anime
+    @AdminAction("DELETE ANIME id={id}")
+    fun deleteAnime(id: UUID){
+        animeRepository.deleteById(id)
+    }
+    
+    //create anime
+    @AdminAction("INSERT ANIME")
+    fun insertAnime(animeRequest: NewAnimeRequest): Anime {
+        println(animeRequest);
+        val state = stateRepository.findByName(animeRequest.state).orElseThrow {
+            throw BadRequestResponse("State not found")
+        }
+        
+        val managedProducers:MutableSet<Producer> = animeRequest.producers?.map { producer ->
+            producersRepository.findByName(producer)
+                .orElseGet {
+                    producersRepository.findByNameIgnoreCase(producer) // Busca case-insensitive
+                        .orElseGet {
+                            producersRepository.save(Producer(name = producer))
+                        }
+                }
+        }?.toMutableSet() ?: mutableSetOf()
+        val managedCreators:MutableSet<Creator> = animeRequest.creators?.map { producer ->
+            creatorsRepository.findByName(producer)
+                .orElseGet {
+                    creatorsRepository.findByNameIgnoreCase(producer)
+                        .orElseGet {
+                            creatorsRepository.save(Creator(name = producer))
+                        }
+                }
+        }?.toMutableSet() ?: mutableSetOf()
+        val managedStudios:MutableSet<Studio> = animeRequest.studios?.map { producer ->
+            studiosRepository.findByName(producer)
+                .orElseGet {
+                    studiosRepository.findByNameIgnoreCase(producer)
+                        .orElseGet {
+                            studiosRepository.save(Studio(name = producer))
+                        }
+                }
+        }?.toMutableSet() ?: mutableSetOf()
+        
+        
+        val anime = Anime(
+            name = animeRequest.name,
+            name2 = animeRequest.name2,
+            description = animeRequest.description,
+            genre = animeRequest.genre,
+            releaseDate = animeRequest.releaseDate,
+            quality = animeRequest.quality,
+            language =animeRequest.language,
+            state = state,
+            producers = managedProducers,
+            creators = managedCreators,
+            studios = managedStudios,
+        )
+        
+        return animeRepository.save(anime)
     }
     
 }

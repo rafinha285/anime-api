@@ -8,8 +8,9 @@ import java.util.*
 @Table(name = "users_sessions", schema = "users")
 data class UserSession(
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "session_id", nullable = false)
-    val sessionId: UUID = UUID.randomUUID(),
+    val sessionId: UUID,
     
     @Column(name = "user_id", nullable = false)
     val userId: UUID = UUID.randomUUID(),

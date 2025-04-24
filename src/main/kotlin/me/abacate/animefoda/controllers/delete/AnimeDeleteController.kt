@@ -4,6 +4,7 @@ import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.models.Anime
 import me.abacate.animefoda.repositories.AnimeRepository
 import me.abacate.animefoda.response.ApiResponse
+import me.abacate.animefoda.services.AnimeService
 import me.abacate.animefoda.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -18,7 +19,7 @@ import java.util.UUID
 @RestController
 @RequestMapping("/d/anime")
 class AnimeDeleteController(
-    private val animeRepository: AnimeRepository,
+    private val animeService: AnimeService,
     private val userService: UserService,
 ) {
     @DeleteMapping("/{id}")
@@ -29,8 +30,8 @@ class AnimeDeleteController(
         
         if(!userService.isAdminAndSuperUser(UUID.fromString(jwt.subject))) throw UnauthorizedResponse()
         
-        animeRepository.deleteById(id)
+        animeService.deleteAnime(id);
         
-        return ApiResponse(message = "Anime deleted")
+        return ApiResponse(message = "Anime deleted ${id}")
     }
 }

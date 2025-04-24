@@ -11,6 +11,7 @@ import me.abacate.animefoda.models.Studio
 import me.abacate.animefoda.repositories.*
 import me.abacate.animefoda.request.NewAnimeRequest
 import me.abacate.animefoda.response.ApiResponse
+import me.abacate.animefoda.services.AnimeService
 import me.abacate.animefoda.services.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
@@ -22,11 +23,9 @@ import java.util.*
 @RequestMapping("/p/anime/")
 class AnimePostController(
     private val userService: UserService,
+    private val animeService: AnimeService,
     private val animeRepository: AnimeRepository,
     private val stateRepository: StateRepository,
-    private val producersRepository: ProducersRepository,
-    private val creatorsRepository: CreatorsRepository,
-    private val studiosRepository: StudiosRepository,
 ) {
     @PostMapping("/new")
     fun addAnime(
@@ -37,37 +36,7 @@ class AnimePostController(
             throw UnauthorizedResponse()
         }
         
-        val state = stateRepository.findByName(animeRequest.state).orElseThrow {
-            throw BadRequestResponse("State not found")
-        }
         
-        val managedProducers:MutableSet<Producer> = animeRequest.producers?.map { producer ->
-            producersRepository.findByName(producer)
-                .orElseGet {
-                    producersRepository.findByNameIgnoreCase(producer) // Busca case-insensitive
-                        .orElseGet {
-                            producersRepository.save(Producer(name = producer))
-                        }
-                }
-        }?.toMutableSet() ?: mutableSetOf()
-        val managedCreators:MutableSet<Creator> = animeRequest.creators?.map { producer ->
-            creatorsRepository.findByName(producer)
-                .orElseGet {
-                    creatorsRepository.findByNameIgnoreCase(producer)
-                        .orElseGet {
-                            creatorsRepository.save(Creator(name = producer))
-                        }
-                }
-        }?.toMutableSet() ?: mutableSetOf()
-        val managedStudios:MutableSet<Studio> = animeRequest.studios?.map { producer ->
-            studiosRepository.findByName(producer)
-                .orElseGet {
-                    studiosRepository.findByNameIgnoreCase(producer)
-                        .orElseGet {
-                            studiosRepository.save(Studio(name = producer))
-                        }
-                }
-        }?.toMutableSet() ?: mutableSetOf()
 //        val creators = animeAssociationService.getCreatorsByIds(animeRequest.creators).toMutableSet()
 //        val studios = animeAssociationService.getStudiosByIds(animeRequest.studios).toMutableSet()
         
@@ -79,23 +48,7 @@ class AnimePostController(
 //        }
         
         
-        val anime = Anime(
-            name = animeRequest.name,
-            name2 = animeRequest.name2,
-            description = animeRequest.description,
-            genre = animeRequest.genre,
-            releaseDate = animeRequest.releaseDate,
-            quality = animeRequest.quality,
-            language =animeRequest.language,
-            state = state,
-            producers = managedProducers,
-            creators = managedCreators,
-            studios = managedStudios,
-        )
-        
-        
-        
-        animeRepository.save(anime)
+        val anime = animeService.insertAnime(animeRequest)
         
 //        animeService.createAnimeFromRequest(anime)
         return ApiResponse(data = anime,message = "Anime ${anime.id} created")
