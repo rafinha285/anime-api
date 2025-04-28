@@ -50,7 +50,9 @@ class SecurityConfig(
                 auth
                     .requestMatchers("/g/user/**").authenticated()
                     .requestMatchers("/p/animelist/**").authenticated()
+                    .requestMatchers("/d/animelist/**").authenticated()
                     .requestMatchers("/p/comment/**").authenticated()
+                    .requestMatchers("/d/comment/**").authenticated()
                     .anyRequest().permitAll()
             }
             .oauth2ResourceServer { resourceServer ->
