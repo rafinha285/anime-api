@@ -2,6 +2,7 @@ package me.abacate.animefoda.models
 
 import jakarta.persistence.*
 import me.abacate.animefoda.request.LoginRequest
+import me.abacate.animefoda.response.UserResponse
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDate
 import java.util.*
@@ -56,5 +57,17 @@ data class User(
 ){
     fun isLoginCorrect(loginRequest: LoginRequest, passwordEncoder: PasswordEncoder):Boolean{
         return passwordEncoder.matches(loginRequest.password,this.password)
+    }
+    
+    fun toResponse(): UserResponse {
+        return UserResponse(
+            id = this.id,
+            name = this.name,
+            email = this.email,
+            surname = this.surname,
+            username = this.username,
+            birthdate = this.birthdate,
+            roles = this.roles
+        )
     }
 }
