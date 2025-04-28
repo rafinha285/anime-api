@@ -1,7 +1,14 @@
 package me.abacate.animefoda.services
 
+import jakarta.transaction.Transactional
+import me.abacate.animefoda.embedded.CommentLikeId
+import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.models.Comment
+import me.abacate.animefoda.models.CommentLike
+import me.abacate.animefoda.repositories.CommentLikeRepository
 import me.abacate.animefoda.repositories.CommentRepository
+import me.abacate.animefoda.repositories.UserRepository
+import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.response.CommentResponse
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -9,6 +16,8 @@ import java.util.UUID
 @Service
 class CommentService(
     private val commentRepository: CommentRepository,
+    private val commentLikeRepository: CommentLikeRepository,
+    private val userRepository: UserRepository,
 ) {
     fun getCommentHierarchy(pageId: UUID?, userId: UUID?): List<CommentResponse> {
         val allComments = commentRepository.findCommentsWithFilters(pageId, userId)
@@ -34,7 +43,8 @@ class CommentService(
             createdAt = comment.createdAt,
             children = comment.children
                 .sortedByDescending { it.createdAt }
-                .map { convertToResponse(commentMap[it.id]!!, commentMap) }
+                .map { convertToResponse(commentMap[it.id]!!, commentMap) },
+            likes = comment.totalLikes,
         )
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.util.*
 
-interface CommentRepository: JpaRepository<Comment, Int>{
+interface CommentRepository: JpaRepository<Comment, Long>{
     @Query("""
         SELECT c FROM Comment c
         LEFT JOIN FETCH c.children
@@ -19,5 +19,5 @@ interface CommentRepository: JpaRepository<Comment, Int>{
     ): List<Comment>
     fun getByPageId(pageId: UUID): MutableList<Comment>
     fun getByUserId(userId: UUID): MutableList<Comment>
-    fun getCommentById(id: Int): MutableList<Comment>
+    fun getCommentById(id: Long): MutableList<Comment>
 }

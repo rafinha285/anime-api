@@ -11,5 +11,6 @@ data class CommentResponse(
     val userId: UUID,
     val content: String,
     val createdAt: LocalDateTime,
-    val children: List<CommentResponse> = emptyList()
+    val children: List<CommentResponse> = emptyList(),
+    val likes: Int,
 )

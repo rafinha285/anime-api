@@ -3,7 +3,7 @@ package me.abacate.animefoda.models
 import jakarta.persistence.*
 import me.abacate.animefoda.enums.PriorityAnimelist
 import me.abacate.animefoda.enums.StateAnimelist
-import me.abacate.animefoda.serialized.UserAnimelistId
+import me.abacate.animefoda.embedded.UserAnimelistId
 import java.time.LocalDateTime
 import java.util.UUID
 

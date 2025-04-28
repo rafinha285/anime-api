@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
 import me.abacate.animefoda.response.CommentResponse
+import org.hibernate.annotations.Formula
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -30,7 +31,6 @@ data class Comment(
     @JsonManagedReference
     val children: MutableList<Comment> = mutableListOf(),
     
-    
     @Column(name = "page_id", nullable=false)
     val pageId:UUID? = null,
     
@@ -42,6 +42,9 @@ data class Comment(
     
     @Column(name = "created_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     val createdAt: LocalDateTime = LocalDateTime.now(),
+    
+    @Formula("(SELECT COUNT(*) FROM users.comments_likes cl WHERE cl.comment_id = id)")
+    val totalLikes: Int = 0,
 ) {
     @get:JsonProperty("parentId")
     val parentId: Int?
@@ -54,7 +57,8 @@ data class Comment(
         userId = userId!!,
         content = content,
         createdAt = createdAt,
-        children = children.map { it.toResponse() }
+        children = children.map { it.toResponse() },
+        likes = totalLikes,
     )
     fun buildResponseHierarchy(commentMap: Map<Int, Comment>): CommentResponse {
         return CommentResponse(
@@ -66,7 +70,8 @@ data class Comment(
             createdAt = createdAt,
             children = children
                 .sortedByDescending { it.createdAt } // Ordenar por data
-                .map { commentMap[it.id]!!.buildResponseHierarchy(commentMap) }
+                .map { commentMap[it.id]!!.buildResponseHierarchy(commentMap) },
+            likes = totalLikes,
         )
     }
 }
