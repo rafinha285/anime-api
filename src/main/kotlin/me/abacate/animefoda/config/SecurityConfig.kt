@@ -6,6 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet
 import com.nimbusds.jose.proc.SecurityContext
 import me.abacate.animefoda.exceptionhandler.JwtAuthenticationEntryPoint
+import me.abacate.animefoda.loader.RSALoaders
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -49,6 +50,9 @@ class SecurityConfig(
                 auth
                     .requestMatchers("/g/user/**").authenticated()
                     .requestMatchers("/p/animelist/**").authenticated()
+                    .requestMatchers("/d/animelist/**").authenticated()
+                    .requestMatchers("/p/comment/**").authenticated()
+                    .requestMatchers("/d/comment/**").authenticated()
                     .anyRequest().permitAll()
             }
             .oauth2ResourceServer { resourceServer ->

@@ -1,4 +1,4 @@
-package me.abacate.animefoda.serialized
+package me.abacate.animefoda.embedded
 
 import jakarta.persistence.Embeddable
 import java.io.Serializable
