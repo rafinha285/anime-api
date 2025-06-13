@@ -1,19 +1,14 @@
 package me.abacate.animefoda.controllers.post
 
 import jakarta.transaction.Transactional
-import me.abacate.animefoda.embedded.CommentLikeId
 import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.models.Comment
-import me.abacate.animefoda.models.CommentLike
-import me.abacate.animefoda.repositories.CommentLikeRepository
 import me.abacate.animefoda.repositories.CommentRepository
 import me.abacate.animefoda.repositories.UserRepository
 import me.abacate.animefoda.request.LikeCommentRequest
 import me.abacate.animefoda.request.NewCommentRequest
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.services.CommentLikeService
-import me.abacate.animefoda.services.CommentService
-import me.abacate.animefoda.services.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.PostMapping
