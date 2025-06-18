@@ -1,7 +1,6 @@
-package me.abacate.animefoda.controllers.delete
+package me.abacate.animefoda.entities.season
 
 import me.abacate.animefoda.errors.UnauthorizedResponse
-import me.abacate.animefoda.repositories.SeasonRepository
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.services.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.util.UUID
 
 @RestController
 @RequestMapping("/d/season")

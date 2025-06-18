@@ -15,7 +15,7 @@ import jakarta.persistence.Table
 import me.abacate.animefoda.character.Character
 import me.abacate.animefoda.entities.creator.Creator
 import me.abacate.animefoda.entities.producer.Producer
-import me.abacate.animefoda.models.Season
+import me.abacate.animefoda.entities.season.Season
 import me.abacate.animefoda.entities.state.State
 import me.abacate.animefoda.entities.studio.Studio
 import org.hibernate.annotations.JdbcTypeCode

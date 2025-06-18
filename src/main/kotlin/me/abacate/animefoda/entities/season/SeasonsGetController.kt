@@ -1,7 +1,5 @@
-package me.abacate.animefoda.controllers.get
+package me.abacate.animefoda.entities.season
 
-import me.abacate.animefoda.models.Season
-import me.abacate.animefoda.repositories.SeasonRepository
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -17,7 +15,7 @@ class SeasonsGetController (
     @GetMapping("/anime/{animeId}")
     fun getSeasonFromAnime(
         @PathVariable("animeId") animeId: UUID
-    ): ApiResponse<List<Season>>{
+    ): ApiResponse<List<Season>> {
         val seasons = seasonRepository.findByAnimeId(animeId)
         return ApiResponse(success = true, data = seasons)
     }
@@ -25,7 +23,7 @@ class SeasonsGetController (
     @GetMapping("/{seasonId}")
     fun getSeason(
         @PathVariable("seasonId") seasonId: UUID
-    ): ApiResponse<Season>{
+    ): ApiResponse<Season> {
         return ApiResponse(data = seasonRepository.getReferenceById(seasonId))
     }
 }
