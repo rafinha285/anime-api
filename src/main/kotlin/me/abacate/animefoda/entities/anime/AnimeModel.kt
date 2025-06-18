@@ -13,11 +13,11 @@ import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import me.abacate.animefoda.character.Character
-import me.abacate.animefoda.models.Creator
-import me.abacate.animefoda.models.Producer
+import me.abacate.animefoda.entities.creator.Creator
+import me.abacate.animefoda.entities.producer.Producer
 import me.abacate.animefoda.models.Season
 import me.abacate.animefoda.models.State
-import me.abacate.animefoda.models.Studio
+import me.abacate.animefoda.entities.studio.Studio
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import java.time.LocalDate

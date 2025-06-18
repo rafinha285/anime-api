@@ -1,5 +1,14 @@
 package me.abacate.animefoda.entities.comment
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.fasterxml.jackson.annotation.JsonProperty
+import jakarta.persistence.*
+import me.abacate.animefoda.response.CommentResponse
+import org.hibernate.annotations.Formula
+import java.time.LocalDateTime
+import java.util.UUID
+
 @Entity
 @Table(name = "comments", schema = "users")
 data class Comment(
@@ -23,7 +32,7 @@ data class Comment(
     val children: MutableList<Comment> = mutableListOf(),
     
     @Column(name = "page_id", nullable=false)
-    val pageId:UUID? = null,
+    val pageId: UUID? = null,
     
     @Column(name = "user_id", nullable=false)
     val userId:UUID? = null,

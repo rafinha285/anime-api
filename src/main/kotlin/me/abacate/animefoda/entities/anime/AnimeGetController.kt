@@ -2,9 +2,9 @@ package me.abacate.animefoda.anime
 
 import me.abacate.animefoda.enums.RoleName
 import me.abacate.animefoda.errors.AnimeNotFound
-import me.abacate.animefoda.repositories.CreatorsRepository
-import me.abacate.animefoda.repositories.ProducersRepository
-import me.abacate.animefoda.repositories.StudiosRepository
+import me.abacate.animefoda.entities.creator.CreatorsRepository
+import me.abacate.animefoda.entities.producer.ProducersRepository
+import me.abacate.animefoda.entities.studio.StudiosRepository
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.services.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
