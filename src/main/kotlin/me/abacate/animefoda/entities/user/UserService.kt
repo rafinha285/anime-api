@@ -1,9 +1,7 @@
-package me.abacate.animefoda.services
+package me.abacate.animefoda.entities.user
 
 import me.abacate.animefoda.entities.role.RoleName
-import me.abacate.animefoda.models.User
 import me.abacate.animefoda.entities.role.RoleRepository
-import me.abacate.animefoda.repositories.UserRepository
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -16,7 +14,7 @@ class UserService(
         return userRepository.save(user)
     }
     
-    fun assignRoleToUser(userId:UUID, roleName: RoleName){
+    fun assignRoleToUser(userId: UUID, roleName: RoleName){
         val user = userRepository.findById(userId)
             .orElseThrow { IllegalArgumentException("User with id $userId was not found") }
         
@@ -27,8 +25,8 @@ class UserService(
         userRepository.save(user)
     }
     
-    fun isAdminAndSuperUser(userId:UUID):Boolean{
-        return containsRole(userId,RoleName.ROLE_ADMIN) && isSuperUser(userId);
+    fun isAdminAndSuperUser(userId: UUID):Boolean{
+        return containsRole(userId, RoleName.ROLE_ADMIN) && isSuperUser(userId);
     }
     
     

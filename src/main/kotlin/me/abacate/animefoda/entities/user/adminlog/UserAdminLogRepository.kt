@@ -1,6 +1,5 @@
-package me.abacate.animefoda.repositories
+package me.abacate.animefoda.entities.user.adminlog
 
-import me.abacate.animefoda.models.UserAdminLog
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserAdminLogRepository: JpaRepository<UserAdminLog, Long>

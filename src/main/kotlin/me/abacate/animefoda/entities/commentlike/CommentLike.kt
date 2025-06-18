@@ -10,7 +10,7 @@ import jakarta.persistence.MapsId
 import jakarta.persistence.Table
 import me.abacate.animefoda.embedded.CommentLikeId
 import me.abacate.animefoda.entities.comment.Comment
-import me.abacate.animefoda.models.User
+import me.abacate.animefoda.entities.user.User
 import java.time.LocalDateTime
 
 @Entity

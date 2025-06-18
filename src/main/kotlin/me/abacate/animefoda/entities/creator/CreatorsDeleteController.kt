@@ -4,7 +4,7 @@ import me.abacate.animefoda.anime.AnimeService
 import me.abacate.animefoda.entities.role.RoleName
 import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.response.ApiResponse
-import me.abacate.animefoda.services.UserService
+import me.abacate.animefoda.entities.user.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.DeleteMapping

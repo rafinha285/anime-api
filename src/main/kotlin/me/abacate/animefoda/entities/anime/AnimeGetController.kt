@@ -6,7 +6,7 @@ import me.abacate.animefoda.entities.creator.CreatorsRepository
 import me.abacate.animefoda.entities.producer.ProducersRepository
 import me.abacate.animefoda.entities.studio.StudiosRepository
 import me.abacate.animefoda.response.ApiResponse
-import me.abacate.animefoda.services.UserService
+import me.abacate.animefoda.entities.user.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.GetMapping

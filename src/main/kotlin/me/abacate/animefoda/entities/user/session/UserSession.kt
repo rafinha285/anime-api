@@ -1,8 +1,4 @@
-package me.abacate.animefoda.models
-
-import jakarta.persistence.*
-import java.time.LocalDateTime
-import java.util.*
+package me.abacate.animefoda.entities.user.session
 
 @Entity
 @Table(name = "users_sessions", schema = "users")

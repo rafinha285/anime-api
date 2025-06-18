@@ -1,7 +1,7 @@
 package me.abacate.animefoda.entities.comment
 
 import me.abacate.animefoda.entities.commentlike.CommentLikeRepository
-import me.abacate.animefoda.repositories.UserRepository
+import me.abacate.animefoda.entities.user.UserRepository
 import me.abacate.animefoda.response.CommentResponse
 import org.springframework.stereotype.Service
 import java.util.UUID

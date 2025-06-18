@@ -1,4 +1,4 @@
-package me.abacate.animefoda.controllers
+package me.abacate.animefoda.controller
 
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.web.bind.annotation.GetMapping

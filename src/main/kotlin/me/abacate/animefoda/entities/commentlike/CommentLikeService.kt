@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional
 import me.abacate.animefoda.embedded.CommentLikeId
 import me.abacate.animefoda.entities.comment.CommentRepository
 import me.abacate.animefoda.errors.BadRequestResponse
-import me.abacate.animefoda.repositories.UserRepository
+import me.abacate.animefoda.entities.user.UserRepository
 import org.springframework.stereotype.Service
 import java.util.UUID
 

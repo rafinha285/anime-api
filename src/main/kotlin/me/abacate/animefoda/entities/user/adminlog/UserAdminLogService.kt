@@ -1,9 +1,7 @@
-package me.abacate.animefoda.services
+package me.abacate.animefoda.entities.user.adminlog
 
+import me.abacate.animefoda.entities.user.UserRepository
 import me.abacate.animefoda.errors.UnauthorizedResponse
-import me.abacate.animefoda.models.UserAdminLog
-import me.abacate.animefoda.repositories.UserAdminLogRepository
-import me.abacate.animefoda.repositories.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service

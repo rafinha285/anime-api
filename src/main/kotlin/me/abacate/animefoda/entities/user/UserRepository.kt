@@ -1,12 +1,11 @@
-package me.abacate.animefoda.repositories
+package me.abacate.animefoda.entities.user
 
-import me.abacate.animefoda.models.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.util.UUID
 
-interface UserRepository:JpaRepository<User, UUID> {
+interface UserRepository: JpaRepository<User, UUID> {
     @Query(
         value = """
             WITH hashed_password AS (

@@ -1,17 +1,18 @@
-package me.abacate.animefoda.controllers.post
+package me.abacate.animefoda.entities.user
 
-import me.abacate.animefoda.models.User
-import me.abacate.animefoda.services.JWTService
-import me.abacate.animefoda.repositories.UserRepository
 import me.abacate.animefoda.request.LoginRequest
 import me.abacate.animefoda.request.NewUserRequest
 import me.abacate.animefoda.request.RefreshTokenRequest
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.response.AuthResponse
 import me.abacate.animefoda.response.UserResponse
+import me.abacate.animefoda.services.JWTService
 import org.springframework.security.crypto.bcrypt.BCrypt
-import org.springframework.web.bind.annotation.*
-
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/p/user")
@@ -54,8 +55,8 @@ class UserPostController(
     
     @PostMapping("/new")
     fun newUser(
-        @RequestBody newUser:NewUserRequest
-    ):ApiResponse<UserResponse> {
+        @RequestBody newUser: NewUserRequest
+    ): ApiResponse<UserResponse> {
         val salt = BCrypt.gensalt()
         val hashedPassword = BCrypt.hashpw(newUser.password, salt)
         val user = User(

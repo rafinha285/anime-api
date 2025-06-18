@@ -1,9 +1,15 @@
-package me.abacate.animefoda.models
+package me.abacate.animefoda.entities.user.animelist
 
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.Id
+import jakarta.persistence.IdClass
+import jakarta.persistence.Table
+import me.abacate.animefoda.embedded.UserAnimelistId
 import me.abacate.animefoda.enums.PriorityAnimelist
 import me.abacate.animefoda.enums.StateAnimelist
-import me.abacate.animefoda.embedded.UserAnimelistId
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -36,5 +42,5 @@ data class UserAnimelist(
     @Column(name = "priority", columnDefinition = "users.priority_value")
     val priority: PriorityAnimelist? = PriorityAnimelist.LOW,
 ) {
-    protected constructor() : this(UUID(0,0),UUID(0,0))
+    protected constructor() : this(UUID(0, 0), UUID(0, 0))
 }

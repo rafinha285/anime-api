@@ -1,9 +1,9 @@
 package me.abacate.animefoda.services
 
-import me.abacate.animefoda.models.User
+import me.abacate.animefoda.entities.user.User
 import me.abacate.animefoda.models.UserSession
-import me.abacate.animefoda.repositories.UserRepository
-import me.abacate.animefoda.repositories.UserSessionRepository
+import me.abacate.animefoda.entities.user.UserRepository
+import me.abacate.animefoda.entities.user.session.UserSessionRepository
 import me.abacate.animefoda.request.LoginRequest
 import me.abacate.animefoda.response.GenTokenResponse
 import org.springframework.beans.factory.annotation.Value

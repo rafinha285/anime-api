@@ -2,7 +2,7 @@ package me.abacate.animefoda.entities.comment
 
 import jakarta.transaction.Transactional
 import me.abacate.animefoda.errors.BadRequestResponse
-import me.abacate.animefoda.repositories.UserRepository
+import me.abacate.animefoda.entities.user.UserRepository
 import me.abacate.animefoda.request.LikeCommentRequest
 import me.abacate.animefoda.request.NewCommentRequest
 import me.abacate.animefoda.response.ApiResponse

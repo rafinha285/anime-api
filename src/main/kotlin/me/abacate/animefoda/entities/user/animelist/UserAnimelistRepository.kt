@@ -1,9 +1,8 @@
-package me.abacate.animefoda.repositories
+package me.abacate.animefoda.entities.user.animelist
 
-import me.abacate.animefoda.models.UserAnimelist
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.repository.query.Param
-import java.util.*
+import java.util.UUID
 
 interface UserAnimelistRepository : JpaRepository<UserAnimelist, UUID> {
     fun findByUserId(@Param("user_id") userId: UUID): List<UserAnimelist>

@@ -1,9 +1,7 @@
-package me.abacate.animefoda.controllers.post
+package me.abacate.animefoda.entities.user.animelist
 
-import me.abacate.animefoda.errors.AnimeNotFound
-import me.abacate.animefoda.models.UserAnimelist
 import me.abacate.animefoda.anime.AnimeRepository
-import me.abacate.animefoda.repositories.UserAnimelistRepository
+import me.abacate.animefoda.errors.AnimeNotFound
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
@@ -11,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.util.UUID
 
 @RestController
 @RequestMapping("/p/animelist")
