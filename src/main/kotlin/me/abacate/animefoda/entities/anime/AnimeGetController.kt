@@ -1,6 +1,6 @@
 package me.abacate.animefoda.anime
 
-import me.abacate.animefoda.enums.RoleName
+import me.abacate.animefoda.entities.role.RoleName
 import me.abacate.animefoda.errors.AnimeNotFound
 import me.abacate.animefoda.entities.creator.CreatorsRepository
 import me.abacate.animefoda.entities.producer.ProducersRepository

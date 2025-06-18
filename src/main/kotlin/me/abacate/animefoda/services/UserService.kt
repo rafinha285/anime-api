@@ -1,8 +1,8 @@
 package me.abacate.animefoda.services
 
-import me.abacate.animefoda.enums.RoleName
+import me.abacate.animefoda.entities.role.RoleName
 import me.abacate.animefoda.models.User
-import me.abacate.animefoda.repositories.RoleRepository
+import me.abacate.animefoda.entities.role.RoleRepository
 import me.abacate.animefoda.repositories.UserRepository
 import org.springframework.stereotype.Service
 import java.util.UUID

@@ -1,6 +1,5 @@
 package me.abacate.animefoda.response
 
-import me.abacate.animefoda.models.Comment
 import java.time.LocalDateTime
 import java.util.*
 

@@ -1,6 +1,7 @@
 package me.abacate.animefoda.models
 
 import jakarta.persistence.*
+import me.abacate.animefoda.entities.role.Role
 import me.abacate.animefoda.request.LoginRequest
 import me.abacate.animefoda.response.UserResponse
 import org.springframework.security.crypto.password.PasswordEncoder

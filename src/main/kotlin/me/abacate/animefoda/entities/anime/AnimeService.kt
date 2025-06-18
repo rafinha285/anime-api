@@ -7,7 +7,7 @@ import me.abacate.animefoda.entities.producer.Producer
 import me.abacate.animefoda.entities.studio.Studio
 import me.abacate.animefoda.entities.creator.CreatorsRepository
 import me.abacate.animefoda.entities.producer.ProducersRepository
-import me.abacate.animefoda.repositories.StateRepository
+import me.abacate.animefoda.entities.state.StateRepository
 import me.abacate.animefoda.entities.studio.StudiosRepository
 import me.abacate.animefoda.request.AddProducersRequest
 import me.abacate.animefoda.request.NewAnimeRequest

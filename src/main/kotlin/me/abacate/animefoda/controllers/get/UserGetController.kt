@@ -1,6 +1,6 @@
 package me.abacate.animefoda.controllers.get
 
-import me.abacate.animefoda.enums.RoleName
+import me.abacate.animefoda.entities.role.RoleName
 import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.errors.UserNotFound
 import me.abacate.animefoda.repositories.UserRepository

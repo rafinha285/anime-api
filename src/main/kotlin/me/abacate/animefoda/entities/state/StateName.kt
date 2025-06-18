@@ -1,4 +1,4 @@
-package me.abacate.animefoda.enums
+package me.abacate.animefoda.entities.state
 
 enum class StateName {
     AIRING,

@@ -1,7 +1,7 @@
 package me.abacate.animefoda.entities.producer
 
 import me.abacate.animefoda.anime.AnimeService
-import me.abacate.animefoda.enums.RoleName
+import me.abacate.animefoda.entities.role.RoleName
 import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.services.UserService

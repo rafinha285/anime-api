@@ -1,7 +1,5 @@
-package me.abacate.animefoda.repositories
+package me.abacate.animefoda.entities.role
 
-import me.abacate.animefoda.enums.RoleName
-import me.abacate.animefoda.models.Role
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.Optional
 

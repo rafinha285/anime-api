@@ -1,6 +1,6 @@
 package me.abacate.animefoda.request
 
-import me.abacate.animefoda.enums.StateName
+import me.abacate.animefoda.entities.state.StateName
 import java.time.LocalDate
 
 data class NewAnimeRequest(

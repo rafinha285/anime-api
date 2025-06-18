@@ -1,7 +1,7 @@
 package me.abacate.animefoda.controllers.post
 
 import me.abacate.animefoda.annotation.AdminAction
-import me.abacate.animefoda.enums.RoleName
+import me.abacate.animefoda.entities.role.RoleName
 import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.services.JWTService
 import me.abacate.animefoda.models.Season
