@@ -1,6 +1,7 @@
-package me.abacate.animefoda.embedded
+package me.abacate.animefoda.entities.commentlike
 
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
 import java.io.Serializable
 import java.util.UUID
 

@@ -7,7 +7,7 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.IdClass
 import jakarta.persistence.Table
-import me.abacate.animefoda.embedded.UserAnimelistId
+import me.abacate.animefoda.entities.user.animelist.UserAnimelistId
 import me.abacate.animefoda.enums.PriorityAnimelist
 import me.abacate.animefoda.enums.StateAnimelist
 import java.time.LocalDateTime

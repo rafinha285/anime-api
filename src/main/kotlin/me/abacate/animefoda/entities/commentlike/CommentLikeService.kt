@@ -1,7 +1,7 @@
 package me.abacate.animefoda.entities.commentlike
 
 import jakarta.transaction.Transactional
-import me.abacate.animefoda.embedded.CommentLikeId
+import me.abacate.animefoda.entities.commentlike.CommentLikeId
 import me.abacate.animefoda.entities.comment.CommentRepository
 import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.entities.user.UserRepository

@@ -8,7 +8,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.MapsId
 import jakarta.persistence.Table
-import me.abacate.animefoda.embedded.CommentLikeId
+import me.abacate.animefoda.entities.commentlike.CommentLikeId
 import me.abacate.animefoda.entities.comment.Comment
 import me.abacate.animefoda.entities.user.User
 import java.time.LocalDateTime
