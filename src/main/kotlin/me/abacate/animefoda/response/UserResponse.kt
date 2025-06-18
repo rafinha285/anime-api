@@ -1,6 +1,6 @@
 package me.abacate.animefoda.response
 
-import me.abacate.animefoda.models.Role
+import me.abacate.animefoda.entities.role.Role
 import java.time.LocalDate
 import java.util.UUID
 

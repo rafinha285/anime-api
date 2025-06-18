@@ -4,7 +4,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import me.abacate.animefoda.errors.UnauthorizedResponse
-import me.abacate.animefoda.repositories.UserSessionRepository
+import me.abacate.animefoda.entities.user.session.UserSessionRepository
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.JwtException

@@ -1,8 +1,8 @@
 package me.abacate.animefoda.loader
 
-import me.abacate.animefoda.enums.RoleName
-import me.abacate.animefoda.models.Role
-import me.abacate.animefoda.repositories.RoleRepository
+import me.abacate.animefoda.entities.role.RoleName
+import me.abacate.animefoda.entities.role.Role
+import me.abacate.animefoda.entities.role.RoleRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 

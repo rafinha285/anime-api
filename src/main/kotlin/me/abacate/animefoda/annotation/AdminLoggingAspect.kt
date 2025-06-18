@@ -1,6 +1,6 @@
 package me.abacate.animefoda.annotation
 
-import me.abacate.animefoda.services.UserAdminLogService
+import me.abacate.animefoda.entities.user.adminlog.*
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.After
 import org.aspectj.lang.annotation.Aspect
