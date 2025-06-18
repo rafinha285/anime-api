@@ -1,20 +1,20 @@
-package me.abacate.animefoda.services
+package me.abacate.animefoda.anime
 
 import me.abacate.animefoda.annotation.AdminAction
 import me.abacate.animefoda.errors.BadRequestResponse
-import org.springframework.transaction.annotation.Transactional
-import me.abacate.animefoda.models.Anime
 import me.abacate.animefoda.models.Creator
 import me.abacate.animefoda.models.Producer
 import me.abacate.animefoda.models.Studio
-import me.abacate.animefoda.repositories.AnimeRepository
+import me.abacate.animefoda.anime.AnimeRepository
 import me.abacate.animefoda.repositories.CreatorsRepository
 import me.abacate.animefoda.repositories.ProducersRepository
 import me.abacate.animefoda.repositories.StateRepository
 import me.abacate.animefoda.repositories.StudiosRepository
 import me.abacate.animefoda.request.AddProducersRequest
 import me.abacate.animefoda.request.NewAnimeRequest
+import me.abacate.animefoda.services.AnimeAssociationService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
 @Service

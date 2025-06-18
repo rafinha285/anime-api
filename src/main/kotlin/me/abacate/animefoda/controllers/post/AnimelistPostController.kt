@@ -2,7 +2,7 @@ package me.abacate.animefoda.controllers.post
 
 import me.abacate.animefoda.errors.AnimeNotFound
 import me.abacate.animefoda.models.UserAnimelist
-import me.abacate.animefoda.repositories.AnimeRepository
+import me.abacate.animefoda.anime.AnimeRepository
 import me.abacate.animefoda.repositories.UserAnimelistRepository
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.security.core.annotation.AuthenticationPrincipal

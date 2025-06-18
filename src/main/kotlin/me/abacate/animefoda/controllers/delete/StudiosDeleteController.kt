@@ -3,7 +3,7 @@ package me.abacate.animefoda.controllers.delete
 import me.abacate.animefoda.enums.RoleName
 import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.response.ApiResponse
-import me.abacate.animefoda.services.AnimeService
+import me.abacate.animefoda.anime.AnimeService
 import me.abacate.animefoda.services.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt

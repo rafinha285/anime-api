@@ -1,10 +1,10 @@
 package me.abacate.animefoda.controllers.delete
 
 import me.abacate.animefoda.errors.UnauthorizedResponse
-import me.abacate.animefoda.models.Anime
-import me.abacate.animefoda.repositories.AnimeRepository
+import me.abacate.animefoda.anime.Anime
+import me.abacate.animefoda.anime.AnimeRepository
 import me.abacate.animefoda.response.ApiResponse
-import me.abacate.animefoda.services.AnimeService
+import me.abacate.animefoda.anime.AnimeService
 import me.abacate.animefoda.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal

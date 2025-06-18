@@ -2,7 +2,7 @@ package me.abacate.animefoda.controllers.get
 
 import me.abacate.animefoda.errors.AnimeNotFound
 import me.abacate.animefoda.models.Producer
-import me.abacate.animefoda.repositories.AnimeRepository
+import me.abacate.animefoda.anime.AnimeRepository
 import me.abacate.animefoda.repositories.ProducersRepository
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.web.bind.annotation.GetMapping

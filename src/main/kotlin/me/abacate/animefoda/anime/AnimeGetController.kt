@@ -1,9 +1,7 @@
-package me.abacate.animefoda.controllers.get
+package me.abacate.animefoda.anime
 
 import me.abacate.animefoda.enums.RoleName
 import me.abacate.animefoda.errors.AnimeNotFound
-import me.abacate.animefoda.models.*
-import me.abacate.animefoda.repositories.AnimeRepository
 import me.abacate.animefoda.repositories.CreatorsRepository
 import me.abacate.animefoda.repositories.ProducersRepository
 import me.abacate.animefoda.repositories.StudiosRepository
@@ -30,7 +28,7 @@ class AnimeGetController(
     @GetMapping("/all")
     fun getAnimes(
         @AuthenticationPrincipal jwt: Jwt?,
-    ):ApiResponse<List<Anime>> {
+    ): ApiResponse<List<Anime>> {
         val isAdmin = jwt?.subject?.let { subject ->
             try {
                 userService.containsRole(UUID.fromString(subject), RoleName.ROLE_ADMIN)
@@ -45,8 +43,8 @@ class AnimeGetController(
     }
     
     @GetMapping("/{id}")
-    fun getAnime(@PathVariable id:String):ApiResponse<Anime> {
-        val anime = animeRepository.findById(UUID.fromString(id)).orElseThrow { AnimeNotFound(id)}
+    fun getAnime(@PathVariable id:String): ApiResponse<Anime> {
+        val anime = animeRepository.findById(UUID.fromString(id)).orElseThrow { AnimeNotFound(id) }
         return ApiResponse(success = true, data = anime)
     }
     

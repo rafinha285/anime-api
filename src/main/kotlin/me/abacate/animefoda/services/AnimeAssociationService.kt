@@ -4,7 +4,7 @@ import org.springframework.transaction.annotation.Transactional
 import me.abacate.animefoda.models.Creator
 import me.abacate.animefoda.models.Producer
 import me.abacate.animefoda.models.Studio
-import me.abacate.animefoda.repositories.AnimeRepository
+import me.abacate.animefoda.anime.AnimeRepository
 import me.abacate.animefoda.repositories.CreatorsRepository
 import me.abacate.animefoda.repositories.ProducersRepository
 import me.abacate.animefoda.repositories.StudiosRepository
