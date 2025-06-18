@@ -1,5 +1,9 @@
 package me.abacate.animefoda.entities.user.session
 
+import jakarta.persistence.*
+import java.time.LocalDateTime
+import java.util.UUID
+
 @Entity
 @Table(name = "users_sessions", schema = "users")
 data class UserSession(
