@@ -1,13 +1,10 @@
-package me.abacate.animefoda.services
+package me.abacate.animefoda.entities.commentlike
 
 import jakarta.transaction.Transactional
 import me.abacate.animefoda.embedded.CommentLikeId
+import me.abacate.animefoda.entities.comment.CommentRepository
 import me.abacate.animefoda.errors.BadRequestResponse
-import me.abacate.animefoda.models.CommentLike
-import me.abacate.animefoda.repositories.CommentLikeRepository
-import me.abacate.animefoda.repositories.CommentRepository
 import me.abacate.animefoda.repositories.UserRepository
-import me.abacate.animefoda.response.ApiResponse
 import org.springframework.stereotype.Service
 import java.util.UUID
 

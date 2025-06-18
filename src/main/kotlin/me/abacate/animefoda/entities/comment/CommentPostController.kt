@@ -1,21 +1,19 @@
-package me.abacate.animefoda.controllers.post
+package me.abacate.animefoda.entities.comment
 
 import jakarta.transaction.Transactional
 import me.abacate.animefoda.errors.BadRequestResponse
-import me.abacate.animefoda.models.Comment
-import me.abacate.animefoda.repositories.CommentRepository
 import me.abacate.animefoda.repositories.UserRepository
 import me.abacate.animefoda.request.LikeCommentRequest
 import me.abacate.animefoda.request.NewCommentRequest
 import me.abacate.animefoda.response.ApiResponse
-import me.abacate.animefoda.services.CommentLikeService
+import me.abacate.animefoda.entities.commentlike.CommentLikeService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.util.UUID
 
 @RestController
 @RequestMapping("/p/comment")

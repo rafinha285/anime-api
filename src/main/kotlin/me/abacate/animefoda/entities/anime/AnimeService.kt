@@ -5,7 +5,6 @@ import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.models.Creator
 import me.abacate.animefoda.models.Producer
 import me.abacate.animefoda.models.Studio
-import me.abacate.animefoda.anime.AnimeRepository
 import me.abacate.animefoda.repositories.CreatorsRepository
 import me.abacate.animefoda.repositories.ProducersRepository
 import me.abacate.animefoda.repositories.StateRepository
@@ -29,7 +28,7 @@ class AnimeService(
 ) {
     //produtores
     @AdminAction("ADD PRODUCER TO ANIME id={id} prodName={prod.name}")
-    fun addProducerToAnime(id: UUID, prod: AddProducersRequest): Anime{
+    fun addProducerToAnime(id: UUID, prod: AddProducersRequest): AnimeModel{
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
         println(prod)
@@ -44,7 +43,7 @@ class AnimeService(
         anime.producers.add(producer);
         return animeRepository.save(anime);
     }
-    fun deleteProducer(id: UUID, prod:String): Anime {
+    fun deleteProducer(id: UUID, prod:String): AnimeModel {
         val anime = animeRepository.findById(id)
         .orElseThrow { RuntimeException("Anime not found!") }
         val producer = producersRepository.findByName(prod).orElseThrow { RuntimeException("Producer not found!") }
@@ -54,7 +53,7 @@ class AnimeService(
     
     //criadores
     @AdminAction("ADD CREATOR TO ANIME animeId={id} prodName={crea.name}")
-    fun addCreatorToAnime(id: UUID, crea: AddProducersRequest): Anime{
+    fun addCreatorToAnime(id: UUID, crea: AddProducersRequest): AnimeModel{
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
         val producer: Creator = creatorsRepository.findByName(crea.name)
@@ -68,7 +67,7 @@ class AnimeService(
         anime.creators.add(producer);
         return animeRepository.save(anime);
     }
-    fun deleteCreator(id: UUID, prod:String): Anime {
+    fun deleteCreator(id: UUID, prod:String): AnimeModel {
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
         val producer = creatorsRepository.findByName(prod).orElseThrow { RuntimeException("Producer not found!") }
@@ -78,7 +77,7 @@ class AnimeService(
     
     //studios
     @AdminAction("ADD STUDIO TO ANIME animeId={id} prodName={stud.name}")
-    fun addStudioToAnime(id: UUID, stud: AddProducersRequest): Anime{
+    fun addStudioToAnime(id: UUID, stud: AddProducersRequest): AnimeModel{
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
         val producer: Studio = studiosRepository.findByName(stud.name)
@@ -92,7 +91,7 @@ class AnimeService(
         anime.studios.add(producer);
         return animeRepository.save(anime);
     }
-    fun deleteStudio(id: UUID, prod:String): Anime {
+    fun deleteStudio(id: UUID, prod:String): AnimeModel {
         val anime = animeRepository.findById(id)
             .orElseThrow { RuntimeException("Anime not found!") }
         val producer = studiosRepository.findByName(prod).orElseThrow { RuntimeException("Producer not found!") }
@@ -109,7 +108,7 @@ class AnimeService(
     
     //create anime
     @AdminAction("INSERT ANIME")
-    fun insertAnime(animeRequest: NewAnimeRequest): Anime {
+    fun insertAnime(animeRequest: NewAnimeRequest): AnimeModel {
         val state = stateRepository.findByName(animeRequest.state).orElseThrow {
             throw BadRequestResponse("State not found")
         }
@@ -143,7 +142,7 @@ class AnimeService(
         }?.toMutableSet() ?: mutableSetOf()
         
         
-        val anime = Anime(
+        val anime = AnimeModel(
             name = animeRequest.name,
             name2 = animeRequest.name2,
             description = animeRequest.description,

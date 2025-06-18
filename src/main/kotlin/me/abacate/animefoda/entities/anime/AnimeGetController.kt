@@ -28,7 +28,7 @@ class AnimeGetController(
     @GetMapping("/all")
     fun getAnimes(
         @AuthenticationPrincipal jwt: Jwt?,
-    ): ApiResponse<List<Anime>> {
+    ): ApiResponse<List<AnimeModel>> {
         val isAdmin = jwt?.subject?.let { subject ->
             try {
                 userService.containsRole(UUID.fromString(subject), RoleName.ROLE_ADMIN)
@@ -43,7 +43,7 @@ class AnimeGetController(
     }
     
     @GetMapping("/{id}")
-    fun getAnime(@PathVariable id:String): ApiResponse<Anime> {
+    fun getAnime(@PathVariable id:String): ApiResponse<AnimeModel> {
         val anime = animeRepository.findById(UUID.fromString(id)).orElseThrow { AnimeNotFound(id) }
         return ApiResponse(success = true, data = anime)
     }

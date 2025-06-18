@@ -12,7 +12,7 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
-import me.abacate.animefoda.models.Character
+import me.abacate.animefoda.character.Character
 import me.abacate.animefoda.models.Creator
 import me.abacate.animefoda.models.Producer
 import me.abacate.animefoda.models.Season
@@ -26,7 +26,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "anime", schema = "anime")
-data class Anime(
+data class AnimeModel(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // ou GenerationType.AUTO, conforme sua configuração
     @Column(name = "id", columnDefinition = "uuid")

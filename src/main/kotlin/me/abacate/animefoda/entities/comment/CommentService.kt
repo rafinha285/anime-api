@@ -1,14 +1,7 @@
-package me.abacate.animefoda.services
+package me.abacate.animefoda.entities.comment
 
-import jakarta.transaction.Transactional
-import me.abacate.animefoda.embedded.CommentLikeId
-import me.abacate.animefoda.errors.BadRequestResponse
-import me.abacate.animefoda.models.Comment
-import me.abacate.animefoda.models.CommentLike
-import me.abacate.animefoda.repositories.CommentLikeRepository
-import me.abacate.animefoda.repositories.CommentRepository
+import me.abacate.animefoda.entities.commentlike.CommentLikeRepository
 import me.abacate.animefoda.repositories.UserRepository
-import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.response.CommentResponse
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -33,7 +26,7 @@ class CommentService(
             .map { convertToResponse(it, commentMap) }
     }
     
-    private fun convertToResponse(comment: Comment, commentMap: Map<Int?,Comment>): CommentResponse{
+    private fun convertToResponse(comment: Comment, commentMap: Map<Int?,Comment>): CommentResponse {
         return CommentResponse(
             id = comment.id!!,
             parentId = comment.parent?.id,

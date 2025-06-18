@@ -1,19 +1,15 @@
-package me.abacate.animefoda.controllers.delete
+package me.abacate.animefoda.entities.anime
 
-import me.abacate.animefoda.errors.UnauthorizedResponse
-import me.abacate.animefoda.anime.Anime
-import me.abacate.animefoda.anime.AnimeRepository
-import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.anime.AnimeService
+import me.abacate.animefoda.errors.UnauthorizedResponse
+import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.services.UserService
-import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.server.ResponseStatusException
 import java.util.UUID
 
 @RestController
@@ -26,7 +22,7 @@ class AnimeDeleteController(
     fun deleteAnime(
         @PathVariable id: UUID,
         @AuthenticationPrincipal jwt: Jwt,
-    ):ApiResponse<Boolean?>{
+    ): ApiResponse<Boolean?> {
         
         if(!userService.isAdminAndSuperUser(UUID.fromString(jwt.subject))) throw UnauthorizedResponse()
         

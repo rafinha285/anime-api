@@ -1,13 +1,4 @@
-package me.abacate.animefoda.models
-
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonManagedReference
-import com.fasterxml.jackson.annotation.JsonProperty
-import jakarta.persistence.*
-import me.abacate.animefoda.response.CommentResponse
-import org.hibernate.annotations.Formula
-import java.time.LocalDateTime
-import java.util.UUID
+package me.abacate.animefoda.entities.comment
 
 @Entity
 @Table(name = "comments", schema = "users")
