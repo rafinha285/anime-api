@@ -26,7 +26,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "anime", schema = "anime")
-data class AnimeModel(
+data class Anime(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // ou GenerationType.AUTO, conforme sua configuração
     @Column(name = "id", columnDefinition = "uuid")
