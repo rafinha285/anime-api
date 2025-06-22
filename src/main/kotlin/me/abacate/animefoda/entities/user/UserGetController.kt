@@ -2,6 +2,7 @@ package me.abacate.animefoda.entities.user
 
 import me.abacate.animefoda.entities.role.RoleName
 import me.abacate.animefoda.errors.BadRequestResponse
+import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.errors.UserNotFound
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.response.UserResponse
@@ -41,6 +42,16 @@ class UserGetController(
         }catch(e: Exception){
             throw BadRequestResponse(reason = e.localizedMessage)
         }
+    }
+    
+    @GetMapping("/all")
+    fun allUsers(
+        @AuthenticationPrincipal jwt: Jwt,
+    ): ApiResponse<List<UserResponse>> {
+        if(!userService.containsRole(UUID.fromString(jwt.subject), RoleName.ROLE_ADMIN))
+            throw UnauthorizedResponse();
+        val users = userRepository.findAll().toList().map{it.toResponse()}
+        return ApiResponse(success = true, message = "Admin action", data = users)
     }
     
     @GetMapping("/{id}")
