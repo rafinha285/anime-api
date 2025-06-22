@@ -29,7 +29,7 @@ class AnimePostController(
     fun addAnime(
         @RequestBody animeRequest: NewAnimeRequest,
         @AuthenticationPrincipal jwt: Jwt,
-    ): ApiResponse<AnimeModel> {
+    ): ApiResponse<Anime> {
         if(!userService.isAdminAndSuperUser(UUID.fromString(jwt.subject))) {
             throw UnauthorizedResponse()
         }
@@ -58,7 +58,7 @@ class AnimePostController(
         @RequestBody animeRequest: NewAnimeRequest,
         @PathVariable id: UUID,
         @AuthenticationPrincipal jwt: Jwt,
-    ): ApiResponse<AnimeModel> {
+    ): ApiResponse<Anime> {
         
         if(!userService.containsRole(UUID.fromString(jwt.subject), RoleName.ROLE_ADMIN)){
             throw UnauthorizedResponse()

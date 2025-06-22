@@ -19,16 +19,13 @@ import java.util.UUID
 @RequestMapping("/g/anime")
 class AnimeGetController(
     private val animeRepository: AnimeRepository,
-    private val producersRepository: ProducersRepository,
-    private val studiosRepository: StudiosRepository,
-    private val creatorsRepository: CreatorsRepository,
     private val userService: UserService
 ) {
     
     @GetMapping("/all")
     fun getAnimes(
         @AuthenticationPrincipal jwt: Jwt?,
-    ): ApiResponse<List<AnimeModel>> {
+    ): ApiResponse<List<Anime>> {
         val isAdmin = jwt?.subject?.let { subject ->
             try {
                 userService.containsRole(UUID.fromString(subject), RoleName.ROLE_ADMIN)
@@ -43,7 +40,7 @@ class AnimeGetController(
     }
     
     @GetMapping("/{id}")
-    fun getAnime(@PathVariable id:String): ApiResponse<AnimeModel> {
+    fun getAnime(@PathVariable id:String): ApiResponse<Anime> {
         val anime = animeRepository.findById(UUID.fromString(id)).orElseThrow { AnimeNotFound(id) }
         return ApiResponse(success = true, data = anime)
     }
