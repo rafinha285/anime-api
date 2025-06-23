@@ -46,4 +46,10 @@ class UserService(
         
         return user.superuser
     }
+    
+    fun getUserById(userId: UUID): User {
+        val user = userRepository.findById(userId)
+        .orElseThrow { IllegalArgumentException("User with id $userId was not found") }
+        return user
+    }
 }

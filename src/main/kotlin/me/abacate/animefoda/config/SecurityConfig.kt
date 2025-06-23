@@ -53,6 +53,8 @@ class SecurityConfig(
                     .requestMatchers("/d/animelist/**").authenticated()
                     .requestMatchers("/p/comment/**").authenticated()
                     .requestMatchers("/d/comment/**").authenticated()
+                    .requestMatchers("/p/anime/**").authenticated()
+                    .requestMatchers("/p/season/**").authenticated()
                     .anyRequest().permitAll()
             }
             .oauth2ResourceServer { resourceServer ->

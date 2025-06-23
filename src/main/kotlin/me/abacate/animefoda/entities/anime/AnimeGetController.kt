@@ -19,9 +19,6 @@ import java.util.UUID
 @RequestMapping("/g/anime")
 class AnimeGetController(
     private val animeRepository: AnimeRepository,
-    private val producersRepository: ProducersRepository,
-    private val studiosRepository: StudiosRepository,
-    private val creatorsRepository: CreatorsRepository,
     private val userService: UserService
 ) {
     

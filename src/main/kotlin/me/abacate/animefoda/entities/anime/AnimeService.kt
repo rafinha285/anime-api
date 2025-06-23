@@ -157,4 +157,14 @@ class AnimeService(
         return animeRepository.save(anime)
     }
     
+    
+    fun exists(id: UUID): Boolean {
+        val anime = animeRepository.findById(id)
+        return anime.isPresent
+    }
+    
+    fun getAnime(id: UUID): Anime {
+        val anime = animeRepository.findById(id)
+        return anime.orElseThrow { RuntimeException("Anime not found!") }
+    }
 }

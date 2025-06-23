@@ -6,7 +6,13 @@ import org.springframework.data.repository.query.Param
 import java.util.UUID
 
 interface UserSessionRepository : JpaRepository<UserSession, UUID> {
-    @Query("SELECT u FROM UserSession u WHERE u.sessionId = :sessionId AND u.userId = :userId AND u.enabled = :enabled")
+    @Query("""
+        SELECT us
+        FROM UserSession us
+        WHERE us.sessionId = :sessionId
+        AND us.user.id = :userId
+        AND us.enabled = :enabled
+    """)
     fun findBySessionIdAndEnabled(
         @Param("sessionId") sessionId: UUID,
         @Param("userId") userId: UUID,

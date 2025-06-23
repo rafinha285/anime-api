@@ -26,7 +26,7 @@ class AnimelistPostController(
             throw AnimeNotFound(id)
         }
         val animelistModel = UserAnimelist(
-            anime.id,
+//            anime.id,
             userId = UUID.fromString(jwt.subject),
         )
         animelistRepository.save(animelistModel)
