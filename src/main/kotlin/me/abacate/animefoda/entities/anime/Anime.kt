@@ -13,6 +13,7 @@ import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import me.abacate.animefoda.character.Character
+import me.abacate.animefoda.entities.anime.AnimeDTO
 import me.abacate.animefoda.entities.creator.Creator
 import me.abacate.animefoda.entities.producer.Producer
 import me.abacate.animefoda.entities.season.Season
@@ -53,7 +54,7 @@ data class Anime(
     var name: String = "",
     
     @Column(name = "name2", nullable = false, length = 255)
-    var name2: String? = "",
+    var name2: String? = null,
     
 //    @Enumerated(EnumType.STRING)
     @Column(name = "quality", nullable = false)
@@ -140,4 +141,28 @@ data class Anime(
         inverseJoinColumns = [JoinColumn(name = "id")]
     )
     var seasons: MutableSet<Season> = mutableSetOf(),
-)
+){
+    fun toDTO(): AnimeDTO {
+        return AnimeDTO(
+            id = id!!,
+            averageEpTime = averageEpTime,
+            dateAdded = dateAdded,
+            description = description,
+            genre = genre,
+            language = language!!,
+            name = name,
+            name2 = name2,
+            quality = quality!!,
+            rating = rating!!,
+            visible = visible,
+            weekday = weekday!!,
+            producers = producers,
+            creators = creators,
+            studios = studios,
+            characters = characters,
+            state = state!!,
+            releaseDate = releaseDate!!,
+            seasons = seasons.map { it.toDTO() }
+        )
+    }
+}

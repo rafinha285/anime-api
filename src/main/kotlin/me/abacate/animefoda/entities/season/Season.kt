@@ -31,4 +31,14 @@ data class Season(
     
     @OneToMany(mappedBy = "season", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val episodes: MutableList<Episode> = mutableListOf()
-)
+){
+    fun toDTO(): SeasonDTO {
+        return SeasonDTO(
+            id = id!!,
+            name = name!!,
+            index = index!!,
+            animeId = animeId!!,
+            episodes = episodes.map { it.toDTO() }
+        )
+    }
+}

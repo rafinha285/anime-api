@@ -36,7 +36,7 @@ data class Episode(
     val ending: Int? = null,
     
     @Column(name = "epindex", nullable = false)
-    val epIndex: Int = 0,
+    val epIndex: Int = 1,
     
     @Column(nullable = false)
     val name: String = "",
@@ -57,12 +57,32 @@ data class Episode(
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(name = "audiotracks")
     val audioTracks: List<String> = listOf(),
-
-    @Enumerated(EnumType.STRING)
+    
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(nullable = false)
-    val resolution: List<QualityNumbers> = listOf(QualityNumbers._1920X1080),
+    val resolution: List<String> = listOf(QualityNumbers.Q1920X1080.label),
     
     @Column(nullable = false)
     val visible: Boolean = false,
-)
+) {
+    fun toDTO(): EpisodeDTO {
+        return EpisodeDTO(
+            id = this.id!!,
+            animeId = this.anime?.id!!,
+            animeTitle = this.anime.name,
+            seasonId = this.season?.id!!,
+            seasonTitle = this.season.name!!,
+            dateAdded = this.dateAdded,
+            duration = this.duration,
+            ending = this.ending,
+            epIndex = this.epIndex,
+            name = this.name,
+            openingStart = this.openingStart,
+            openingEnd = this.openingEnd,
+            releaseDate = this.releaseDate,
+            subtitleTracks = this.subtitlesTracks,
+            audioTracks = this.audioTracks,
+            resolution = this.resolution,
+        )
+    }
+}

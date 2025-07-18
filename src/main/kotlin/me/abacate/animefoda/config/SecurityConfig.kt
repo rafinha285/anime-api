@@ -24,8 +24,8 @@ class SecurityConfig(
     val rsaLoaders: RSALoaders
 ) {
     
-    @Value("\${spring.security.oauth2.resourceserver.jwt.secret}")
-    private lateinit var secret: String
+//    @Value("\${spring.security.oauth2.resourceserver.jwt.secret}")
+//    private lateinit var secret: String
     
     
     @Value("\${jwt.private.key}")

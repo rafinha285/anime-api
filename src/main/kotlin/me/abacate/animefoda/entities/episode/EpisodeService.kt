@@ -14,12 +14,13 @@ class EpisodeService(
         return episodeRepository.findByIdAndVisible(id)
     }
     
-    fun getAllEpisodesVisible(): List<Episode> {
-        return episodeRepository.findByVisibleTrue()
+    fun getAllEpisodesVisible(limit: Int? = 10): List<Episode> {
+        return episodeRepository.findByVisibleTrue(limit)
     }
     
-    fun getAllEpisodes(): List<Episode> {
-        return episodeRepository.findAll()
+    fun getAllEpisodes(limit:Int? = 10): List<Episode> {
+        return episodeRepository.findByDateAddedAndLimit(limit)
+//        return episodeRepository.findAll()
     }
     
     fun getEpisode(id: UUID): Episode? {
