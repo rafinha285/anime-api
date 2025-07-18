@@ -157,4 +157,9 @@ class AnimeService(
         return animeRepository.save(anime)
     }
     
+    fun findById(id: UUID): AnimeModel {
+        val anime = animeRepository.findById(id).orElseThrow { RuntimeException("Anime not found!") }
+        return anime
+    }
+    
 }

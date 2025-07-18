@@ -1,5 +1,6 @@
 package me.abacate.animefoda.anime
 
+import me.abacate.animefoda.entities.anime.AnimeDTO
 import me.abacate.animefoda.entities.role.RoleName
 import me.abacate.animefoda.errors.AnimeNotFound
 import me.abacate.animefoda.entities.creator.CreatorsRepository
@@ -19,16 +20,13 @@ import java.util.UUID
 @RequestMapping("/g/anime")
 class AnimeGetController(
     private val animeRepository: AnimeRepository,
-    private val producersRepository: ProducersRepository,
-    private val studiosRepository: StudiosRepository,
-    private val creatorsRepository: CreatorsRepository,
     private val userService: UserService
 ) {
     
     @GetMapping("/all")
     fun getAnimes(
         @AuthenticationPrincipal jwt: Jwt?,
-    ): ApiResponse<List<AnimeModel>> {
+    ): ApiResponse<List<AnimeDTO>> {
         val isAdmin = jwt?.subject?.let { subject ->
             try {
                 userService.containsRole(UUID.fromString(subject), RoleName.ROLE_ADMIN)
@@ -37,15 +35,15 @@ class AnimeGetController(
             }
         } ?: false
         return if (isAdmin)
-            ApiResponse(message = "Admin access", data = animeRepository.findAll())
+            ApiResponse(message = "Admin access", data = animeRepository.findAll().map { it.toDTO()})
         else
-            ApiResponse(data = animeRepository.findByVisibleTrue())
+            ApiResponse(data = animeRepository.findByVisibleTrue().map{it.toDTO()})
     }
     
     @GetMapping("/{id}")
-    fun getAnime(@PathVariable id:String): ApiResponse<AnimeModel> {
+    fun getAnime(@PathVariable id:String): ApiResponse<AnimeDTO> {
         val anime = animeRepository.findById(UUID.fromString(id)).orElseThrow { AnimeNotFound(id) }
-        return ApiResponse(success = true, data = anime)
+        return ApiResponse(success = true, data = anime.toDTO())
     }
     
 //    @GetMapping("/details/{id}")

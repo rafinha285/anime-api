@@ -13,6 +13,7 @@ import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import me.abacate.animefoda.character.Character
+import me.abacate.animefoda.entities.anime.AnimeDTO
 import me.abacate.animefoda.entities.creator.Creator
 import me.abacate.animefoda.entities.producer.Producer
 import me.abacate.animefoda.entities.season.Season
@@ -26,7 +27,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "anime", schema = "anime")
-data class AnimeModel(
+open class AnimeModel(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // ou GenerationType.AUTO, conforme sua configuração
     @Column(name = "id", columnDefinition = "uuid")
@@ -140,4 +141,28 @@ data class AnimeModel(
         inverseJoinColumns = [JoinColumn(name = "id")]
     )
     var seasons: MutableSet<Season> = mutableSetOf(),
-)
+){
+    fun toDTO(): AnimeDTO {
+        return AnimeDTO(
+            id = id!!,
+            averageEpTime = averageEpTime,
+            dateAdded = dateAdded,
+            description = description,
+            genre = genre,
+            language = language!!,
+            name = name,
+            name2 = name,
+            quality = quality!!,
+            rating = rating!!,
+            visible = visible,
+            weekday = weekday,
+            producers = producers.map { it.toDTO() },
+            creators = creators.map { it.toDTO() },
+            studios = studios.map { it.toDTO() },
+            characters = characters.map { it.toDTO() },
+            state = state!!.toDTO(),
+            releaseDate = releaseDate!!,
+            seasons = seasons.map { it.toDTO() },
+        )
+    }
+}
