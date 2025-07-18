@@ -24,8 +24,8 @@ class SecurityConfig(
     val rsaLoaders: RSALoaders
 ) {
     
-    @Value("\${spring.security.oauth2.resourceserver.jwt.secret}")
-    private lateinit var secret: String
+//    @Value("\${spring.security.oauth2.resourceserver.jwt.secret}")
+//    private lateinit var secret: String
     
     
     @Value("\${jwt.private.key}")
@@ -53,6 +53,8 @@ class SecurityConfig(
                     .requestMatchers("/d/animelist/**").authenticated()
                     .requestMatchers("/p/comment/**").authenticated()
                     .requestMatchers("/d/comment/**").authenticated()
+                    .requestMatchers("/p/anime/**").authenticated()
+                    .requestMatchers("/p/season/**").authenticated()
                     .anyRequest().permitAll()
             }
             .oauth2ResourceServer { resourceServer ->

@@ -10,7 +10,9 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
+import me.abacate.animefoda.anime.Anime
 import me.abacate.animefoda.entities.role.Role
+import me.abacate.animefoda.entities.user.animelist.UserAnimelist
 import me.abacate.animefoda.request.LoginRequest
 import me.abacate.animefoda.response.UserResponse
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -64,6 +66,19 @@ data class User(
         inverseJoinColumns = [JoinColumn(name = "role_id")]
     )
     val roles: MutableSet<Role> = mutableSetOf(),
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_anime_list",
+        schema = "users",
+        joinColumns = [
+            JoinColumn(name = "user_id", referencedColumnName = "_id")
+        ],
+        inverseJoinColumns = [
+            JoinColumn(name = "anime_id", referencedColumnName = "anime_id")
+        ]
+    )
+    val animeList: MutableSet<UserAnimelist> = mutableSetOf()
 ){
     fun isLoginCorrect(loginRequest: LoginRequest, passwordEncoder: PasswordEncoder):Boolean{
         return passwordEncoder.matches(loginRequest.password,this.password)
@@ -77,7 +92,8 @@ data class User(
             surname = this.surname,
             username = this.username,
             birthdate = this.birthdate,
-            roles = this.roles
+            roles = this.roles,
+            animelist = this.animeList
         )
     }
 }

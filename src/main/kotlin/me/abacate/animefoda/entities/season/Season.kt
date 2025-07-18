@@ -7,17 +7,14 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
-import me.abacate.animefoda.entities.episode.EpisodeDTO
-import me.abacate.animefoda.entities.episode.EpisodeModel
+import me.abacate.animefoda.entities.episode.Episode
 import java.util.UUID
 
 @Entity
 @Table(name = "seasons", schema = "anime")
-open class Season(
+data class Season(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
@@ -32,22 +29,16 @@ open class Season(
     @Column(name = "index", nullable = false)
     val index: Int? = null,
     
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "episodes",
-        schema = "anime",
-        joinColumns = [JoinColumn(name = "season_id")],
-        inverseJoinColumns = [JoinColumn(name = "id")]
-    )
-    var episodes: MutableSet<EpisodeModel> = mutableSetOf(),
+    @OneToMany(mappedBy = "season", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val episodes: MutableList<Episode> = mutableListOf()
 ){
-    fun toDTO():SeasonDTO{
+    fun toDTO(): SeasonDTO {
         return SeasonDTO(
             id = id!!,
             name = name!!,
-            animeId = animeId!!,
             index = index!!,
-            episodes = episodes.map{it.toDTO()}
+            animeId = animeId!!,
+            episodes = episodes.map { it.toDTO() }
         )
     }
 }

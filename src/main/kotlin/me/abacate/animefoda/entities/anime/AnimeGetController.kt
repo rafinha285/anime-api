@@ -35,7 +35,7 @@ class AnimeGetController(
             }
         } ?: false
         return if (isAdmin)
-            ApiResponse(message = "Admin access", data = animeRepository.findAll().map { it.toDTO()})
+            ApiResponse(message = "Admin access", data = animeRepository.findAll().map { it.toDTO() })
         else
             ApiResponse(data = animeRepository.findByVisibleTrue().map{it.toDTO()})
     }

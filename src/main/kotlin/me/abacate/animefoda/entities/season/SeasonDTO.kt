@@ -8,5 +8,5 @@ data class SeasonDTO(
     val name: String,
     val animeId: UUID,
     val index: Int,
-    val episodes: List<EpisodeDTO>,
+    val episodes: List<EpisodeDTO>
 )

@@ -1,6 +1,7 @@
 package me.abacate.animefoda.entities.user.session
 
 import jakarta.persistence.*
+import me.abacate.animefoda.entities.user.User
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -12,8 +13,20 @@ data class UserSession(
     @Column(name = "session_id", nullable = false)
     val sessionId: UUID = UUID.randomUUID(),
     
-    @Column(name = "user_id", nullable = false)
-    val userId: UUID = UUID.randomUUID(),
+//    @Column(name = "user_id", nullable = false)
+//    val userId: UUID = UUID.randomUUID(),
+//
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinTable(
+//        name = "users",
+//        schema = "users",
+//        joinColumns = [JoinColumn(name = "user_id")],
+//        inverseJoinColumns = [JoinColumn(name = "session_id")]
+//    )
+//    val user: User? = null,
+    @ManyToOne(fetch = FetchType.LAZY)  // Changed to LAZY for performance
+    @JoinColumn(name = "user_id", referencedColumnName = "_id")  // Correct join configuration
+    val user: User? = null,
     
     @Column(name = "created_at", nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),

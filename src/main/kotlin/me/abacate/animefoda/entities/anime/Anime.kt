@@ -27,7 +27,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "anime", schema = "anime")
-open class AnimeModel(
+data class Anime(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // ou GenerationType.AUTO, conforme sua configuração
     @Column(name = "id", columnDefinition = "uuid")
@@ -54,7 +54,7 @@ open class AnimeModel(
     var name: String = "",
     
     @Column(name = "name2", nullable = false, length = 255)
-    var name2: String? = "",
+    var name2: String? = null,
     
 //    @Enumerated(EnumType.STRING)
     @Column(name = "quality", nullable = false)
@@ -151,18 +151,18 @@ open class AnimeModel(
             genre = genre,
             language = language!!,
             name = name,
-            name2 = name,
+            name2 = name2,
             quality = quality!!,
             rating = rating!!,
             visible = visible,
-            weekday = weekday,
-            producers = producers.map { it.toDTO() },
-            creators = creators.map { it.toDTO() },
-            studios = studios.map { it.toDTO() },
-            characters = characters.map { it.toDTO() },
-            state = state!!.toDTO(),
+            weekday = weekday!!,
+            producers = producers,
+            creators = creators,
+            studios = studios,
+            characters = characters,
+            state = state!!,
             releaseDate = releaseDate!!,
-            seasons = seasons.map { it.toDTO() },
+            seasons = seasons.map { it.toDTO() }
         )
     }
 }
