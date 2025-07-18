@@ -13,7 +13,7 @@ import me.abacate.animefoda.entities.state.StateName
 
 @Entity
 @Table(name = "state", schema = "anime")
-data class State (
+open class State (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -31,5 +31,11 @@ data class State (
             // Cria a instância com id nulo (ou default) e o enum convertido
             return State(name = StateName.valueOf(value))
         }
+    }
+    
+    fun toDTO(): StateDTO {
+        return StateDTO(
+            name = name.toString(),
+        )
     }
 }

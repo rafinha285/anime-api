@@ -10,15 +10,23 @@ import java.util.UUID
 
 @Entity
 @Table(name = "studios", schema = "anime")
-data class Studio(
+open class Studio(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", columnDefinition = "uuid")
+    @Column(name = "id", columnDefinition = "uuid", nullable = false)
     val id: UUID? = null,
     
-    @Column(name = "name", length = 255)
+    @Column(name = "name", length = 255, nullable = false)
     val name: String? = null,
     
     @Column(name = "description", columnDefinition = "text")
     val description: String? = null,
-)
+){
+    fun toDTO(): StudioDTO{
+        return StudioDTO(
+            id = id!!,
+            name = name!!,
+            description = description
+        )
+    }
+}

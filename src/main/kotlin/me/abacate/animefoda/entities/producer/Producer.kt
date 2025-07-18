@@ -21,4 +21,12 @@ data class Producer(
     
     @Column(name = "description", columnDefinition = "text", nullable = true)
     val description: String? = null,
-)
+) {
+    fun toDTO(): ProducerDTO{
+        return ProducerDTO(
+            id = id!!,
+            name = name!!,
+            description = description!!
+        )
+    }
+}
