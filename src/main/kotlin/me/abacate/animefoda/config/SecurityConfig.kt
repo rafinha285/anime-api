@@ -45,6 +45,7 @@ class SecurityConfig(
     fun securityFilterChain(http: HttpSecurity, jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint): SecurityFilterChain {
         
         http
+            .cors(Customizer.withDefaults())
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
                 auth

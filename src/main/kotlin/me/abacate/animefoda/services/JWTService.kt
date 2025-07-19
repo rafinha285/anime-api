@@ -2,6 +2,7 @@ package me.abacate.animefoda.services
 
 import me.abacate.animefoda.entities.user.*
 import me.abacate.animefoda.entities.user.session.*
+import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.request.LoginRequest
 import me.abacate.animefoda.response.GenTokenResponse
 import org.springframework.beans.factory.annotation.Value
@@ -29,9 +30,10 @@ class JWTService(
     
     fun generateToken(requestEntity: LoginRequest, userAgent:String): GenTokenResponse {
         val user = userRepository.findByEmail((requestEntity.email))
-            ?: throw BadCredentialsException("Invalid email or password")
+            ?: throw UnauthorizedResponse()
+//            ?: throw BadCredentialsException("Invalid email or password")
         if(!user.isLoginCorrect(requestEntity,bCryptPasswordEncoder)){
-            throw BadCredentialsException("Invalid email or password")
+            throw UnauthorizedResponse()
         }
         
         val now = Instant.now()

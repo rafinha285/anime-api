@@ -10,7 +10,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "producers", schema = "anime")
-data class Producer(
+open class Producer(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", columnDefinition = "uuid")

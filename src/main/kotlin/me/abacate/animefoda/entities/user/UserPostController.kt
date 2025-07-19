@@ -1,10 +1,12 @@
 package me.abacate.animefoda.entities.user
 
+import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.request.LoginRequest
 import me.abacate.animefoda.request.NewUserRequest
 import me.abacate.animefoda.request.RefreshTokenRequest
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.response.AuthResponse
+import me.abacate.animefoda.response.GenTokenResponse
 import me.abacate.animefoda.response.UserResponse
 import me.abacate.animefoda.services.JWTService
 import org.springframework.security.crypto.bcrypt.BCrypt
@@ -25,8 +27,12 @@ class UserPostController(
         @RequestBody loginRequest: LoginRequest,
         @RequestHeader("User-Agent", required = true) userAgent: String,
     ): ApiResponse<AuthResponse> {
-        
-        val jwtValue = jwtService.generateToken(loginRequest, userAgent)
+        val jwtValue: GenTokenResponse
+        try{
+            jwtValue = jwtService.generateToken(loginRequest, userAgent)
+        }catch(e: UnauthorizedResponse){
+            throw e
+        }
         
         return ApiResponse(
             data = AuthResponse(

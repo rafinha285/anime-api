@@ -21,7 +21,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "users",schema = "users")
-data class User(
+open class User(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="_id")
