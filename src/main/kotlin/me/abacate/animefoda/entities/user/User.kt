@@ -10,11 +10,10 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
-import me.abacate.animefoda.anime.Anime
 import me.abacate.animefoda.entities.role.Role
 import me.abacate.animefoda.entities.user.animelist.UserAnimelist
 import me.abacate.animefoda.request.LoginRequest
-import me.abacate.animefoda.response.UserResponse
+import me.abacate.animefoda.response.UserDTO
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDate
 import java.util.UUID
@@ -84,8 +83,8 @@ data class User(
         return passwordEncoder.matches(loginRequest.password,this.password)
     }
     
-    fun toResponse(): UserResponse {
-        return UserResponse(
+    fun toResponse(): UserDTO {
+        return UserDTO(
             id = this.id,
             name = this.name,
             email = this.email,
@@ -93,7 +92,8 @@ data class User(
             username = this.username,
             birthdate = this.birthdate,
             roles = this.roles,
-            animelist = this.animeList
+            animelist = this.animeList.map { it.toDTO() }.toSet(),
+            superuser = this.superuser
         )
     }
 }

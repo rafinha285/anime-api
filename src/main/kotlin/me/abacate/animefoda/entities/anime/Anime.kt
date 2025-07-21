@@ -143,6 +143,7 @@ data class Anime(
     var seasons: MutableSet<Season> = mutableSetOf(),
 ){
     fun toDTO(): AnimeDTO {
+        println(this.toString())
         return AnimeDTO(
             id = id!!,
             averageEpTime = averageEpTime,
@@ -164,5 +165,9 @@ data class Anime(
             releaseDate = releaseDate!!,
             seasons = seasons.map { it.toDTO() }
         )
+    }
+    
+    override fun toString(): String {
+        return "Anime(id=$id, averageEpTime=$averageEpTime, dateAdded=$dateAdded, description='$description', genre=$genre, language=$language, name='$name', name2=$name2, quality=$quality, rating=$rating, visible=$visible, weekday=$weekday, producers=$producers, creators=$creators, studios=$studios, characters=$characters, state=$state, releaseDate=$releaseDate, seasons=$seasons)"
     }
 }

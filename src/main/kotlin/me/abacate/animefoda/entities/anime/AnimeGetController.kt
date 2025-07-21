@@ -31,6 +31,7 @@ class AnimeGetController(
             try {
                 userService.containsRole(UUID.fromString(subject), RoleName.ROLE_ADMIN)
             } catch (e: IllegalArgumentException) {
+                println(e.message)
                 false
             }
         } ?: false

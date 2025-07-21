@@ -5,7 +5,7 @@ import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.errors.UnauthorizedResponse
 import me.abacate.animefoda.errors.UserNotFound
 import me.abacate.animefoda.response.ApiResponse
-import me.abacate.animefoda.response.UserResponse
+import me.abacate.animefoda.response.UserDTO
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.GetMapping
@@ -47,7 +47,7 @@ class UserGetController(
     @GetMapping("/all")
     fun allUsers(
         @AuthenticationPrincipal jwt: Jwt,
-    ): ApiResponse<List<UserResponse>> {
+    ): ApiResponse<List<UserDTO>> {
         if(!userService.containsRole(UUID.fromString(jwt.subject), RoleName.ROLE_ADMIN))
             throw UnauthorizedResponse();
         val users = userRepository.findAll().toList().map{it.toResponse()}
@@ -55,7 +55,7 @@ class UserGetController(
     }
     
     @GetMapping("/{id}")
-    fun getUser(@PathVariable id: UUID): ApiResponse<UserResponse> {
+    fun getUser(@PathVariable id: UUID): ApiResponse<UserDTO> {
         val user = userRepository.findById(id).orElseThrow { UserNotFound(id) }
         return ApiResponse(success = true, data = user.toResponse())
     }
@@ -63,7 +63,7 @@ class UserGetController(
     @GetMapping("/")
     fun getUserFromToken(
         @AuthenticationPrincipal jwt: Jwt
-    ): ApiResponse<UserResponse> {
+    ): ApiResponse<UserDTO> {
         val user = userRepository.findById(UUID.fromString(jwt.subject)).orElseThrow {
             BadRequestResponse(reason = "User not found")
         }

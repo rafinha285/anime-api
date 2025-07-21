@@ -52,4 +52,16 @@ data class UserAnimelist(
 ) {
     //UUID(0, 0)
     protected constructor() : this(UUID(0, 0),UUID(0,0))
+    
+    fun toDTO(): AnimelistDTO{
+        return AnimelistDTO(
+            userId = userId!!,
+            anime = anime!!.toDTO(),
+            status = status!!,
+            startDate = startDate!!,
+            finishDate = finishDate,
+            rate = rate,
+            priority = priority!!
+        )
+    }
 }
