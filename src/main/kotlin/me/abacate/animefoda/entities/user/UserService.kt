@@ -29,6 +29,10 @@ class UserService(
         return containsRole(userId, RoleName.ROLE_ADMIN) && isSuperUser(userId);
     }
     
+    fun containsRole(userId: String, roleName: RoleName): Boolean {
+        val id = UUID.fromString(userId)
+        return containsRole(id, roleName)
+    }
     
     fun containsRole(userId: UUID, roleName: RoleName): Boolean {
         val user = userRepository.findById(userId)

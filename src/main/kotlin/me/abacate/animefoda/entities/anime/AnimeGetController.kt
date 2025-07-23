@@ -1,18 +1,19 @@
 package me.abacate.animefoda.anime
 
 import me.abacate.animefoda.entities.anime.AnimeDTO
+import me.abacate.animefoda.entities.anime.AnimeRepository
 import me.abacate.animefoda.entities.role.RoleName
 import me.abacate.animefoda.errors.AnimeNotFound
-import me.abacate.animefoda.entities.creator.CreatorsRepository
-import me.abacate.animefoda.entities.producer.ProducersRepository
-import me.abacate.animefoda.entities.studio.StudiosRepository
 import me.abacate.animefoda.response.ApiResponse
 import me.abacate.animefoda.entities.user.UserService
+import me.abacate.animefoda.response.AdminAccess
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
@@ -26,24 +27,70 @@ class AnimeGetController(
     @GetMapping("/all")
     fun getAnimes(
         @AuthenticationPrincipal jwt: Jwt?,
-    ): ApiResponse<List<AnimeDTO>> {
-        val isAdmin = jwt?.subject?.let { subject ->
-            try {
-                userService.containsRole(UUID.fromString(subject), RoleName.ROLE_ADMIN)
-            } catch (e: IllegalArgumentException) {
-                false
-            }
-        } ?: false
-        return if (isAdmin)
-            ApiResponse(message = "Admin access", data = animeRepository.findAll().map { it.toDTO() })
-        else
-            ApiResponse(data = animeRepository.findByVisibleTrue().map{it.toDTO()})
+        @RequestParam(defaultValue = "true") summary: Boolean,
+        @RequestParam(defaultValue = "10") limit: Int,
+    ): ApiResponse<List<Any>> {
+        val isAdmin = jwt != null && userService.containsRole(jwt.subject,RoleName.ROLE_ADMIN)
+        val animes = if (isAdmin) {
+            animeRepository.findAll()
+        }else{
+            animeRepository.findByVisibleTrue()
+        }
+        
+        val data = if(summary){
+            animes.map { it.toSummaryDTO() }
+        }else{
+            animes.map { it.toDTO() }
+        }
+        return ApiResponse(message = AdminAccess.adminAccess(isAdmin), data = data)
+//        if(jwt != null) {
+//            val isAdmin = userService.containsRole(jwt?.subject!!, RoleName.ROLE_ADMIN)
+//            return if (isAdmin)
+//                ApiResponse(message = "Admin access", data = animeRepository.findAll().map { it.toSummaryDTO() })
+//            else
+//                ApiResponse(data = animeRepository.findByVisibleTrue().map{it.toDTO()})
+//        }else{
+//            return ApiResponse(data = animeRepository.findByVisibleTrue().map{it.toDTO()})
+//       }
     }
     
     @GetMapping("/{id}")
-    fun getAnime(@PathVariable id:String): ApiResponse<AnimeDTO> {
+    @Cacheable(cacheNames = ["animeById"], key = "#id")
+    fun getAnime(
+        @PathVariable id:String,
+    ): ApiResponse<AnimeDTO> {
         val anime = animeRepository.findById(UUID.fromString(id)).orElseThrow { AnimeNotFound(id) }
         return ApiResponse(success = true, data = anime.toDTO())
+    }
+    
+    @GetMapping("/genre/{gen}")
+    fun getByGen(
+        @PathVariable gen: String,
+        @AuthenticationPrincipal jwt: Jwt?,
+        @RequestParam(defaultValue = "true") summary: Boolean,
+    ): ApiResponse<List<Any>>{
+        val isAdmin = jwt != null && userService.containsRole(jwt.subject!!, RoleName.ROLE_ADMIN)
+        val animes = if(isAdmin){
+            animeRepository.findByGenreContains(gen)
+        }else{
+            animeRepository.findByGenreContainsAndVisible(gen, true)
+        }
+        
+        val data = if(summary){
+            animes.map { it.toSummaryDTO() }
+        }else{
+            animes.map { it.toDTO() }
+        }
+        return ApiResponse(message = AdminAccess.adminAccess(isAdmin), data = data)
+//        if(jwt != null) {
+//            val isAdmin = userService.containsRole(jwt!!.subject, RoleName.ROLE_ADMIN)
+//            return if (isAdmin) {
+//                ApiResponse(data= animeRepository.findByGenreContains(gen).map { it.toDTO() }, message = "Admin access")
+//            }else{
+//                ApiResponse(data = animeRepository.findByGenreContainsAndVisible(gen, true).map { it.toDTO() })
+//            }
+//        }
+//        return ApiResponse(data = animeRepository.findByGenreContainsAndVisible(gen, true).map { it.toDTO() })
     }
     
 //    @GetMapping("/details/{id}")

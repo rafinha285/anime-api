@@ -9,11 +9,12 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
-import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import me.abacate.animefoda.character.Character
 import me.abacate.animefoda.entities.anime.AnimeDTO
+import me.abacate.animefoda.entities.anime.AnimeSummaryDTO
 import me.abacate.animefoda.entities.creator.Creator
 import me.abacate.animefoda.entities.producer.Producer
 import me.abacate.animefoda.entities.season.Season
@@ -118,13 +119,8 @@ open class Anime(
     )
     var characters: MutableSet<Character> = mutableSetOf(),
     
-    @OneToOne(cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "anime_state",
-        schema = "anime",
-        joinColumns = [JoinColumn(name = "anime_id")],
-//        inverseJoinColumns = [JoinColumn(name = "state_id")]
-    )
+    @ManyToOne(cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
+    @JoinColumn(name = "state_id")
     var state: State? = null,
 //    @Enumerated(EnumType.STRING)
 //    @Column(name = "state")
@@ -153,16 +149,30 @@ open class Anime(
             name = name,
             name2 = name2,
             quality = quality!!,
-            rating = rating!!,
+            rating = rating,
             visible = visible,
-            weekday = weekday!!,
-            producers = producers,
-            creators = creators,
-            studios = studios,
-            characters = characters,
-            state = state!!,
+            weekday = weekday,
+            producers = producers.map { it.toDTO() }.toMutableSet(),
+            creators = creators.map { it.toDTO() }.toMutableSet(),
+            studios = studios.map { it.toDTO() }.toMutableSet(),
+            characters = characters.map { it.toDTO() }.toMutableSet(),
+            state = state!!.toDTO(),
             releaseDate = releaseDate!!,
             seasons = seasons.map { it.toDTO() }
+        )
+    }
+    
+    fun toSummaryDTO(): AnimeSummaryDTO{
+        return AnimeSummaryDTO(
+            id = this.id!!,
+            averageEpTime = this.averageEpTime,
+            name = this.name,
+            name2 = this.name2,
+            genre = this.genre,
+            description = this.description,
+            rating = this.rating,
+            weekday = this.weekday,
+            visible = this.visible,
         )
     }
 }

@@ -1,6 +1,7 @@
 package me.abacate.animefoda.anime
 
 import me.abacate.animefoda.annotation.AdminAction
+import me.abacate.animefoda.entities.anime.AnimeRepository
 import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.entities.creator.Creator
 import me.abacate.animefoda.entities.producer.Producer

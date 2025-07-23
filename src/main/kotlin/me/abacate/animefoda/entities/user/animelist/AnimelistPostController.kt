@@ -1,6 +1,6 @@
 package me.abacate.animefoda.entities.user.animelist
 
-import me.abacate.animefoda.anime.AnimeRepository
+import me.abacate.animefoda.entities.anime.AnimeRepository
 import me.abacate.animefoda.errors.AnimeNotFound
 import me.abacate.animefoda.response.ApiResponse
 import org.springframework.security.core.annotation.AuthenticationPrincipal

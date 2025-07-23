@@ -26,7 +26,7 @@ open class Producer(
         return ProducerDTO(
             id = id!!,
             name = name!!,
-            description = description!!
+            description = description
         )
     }
 }

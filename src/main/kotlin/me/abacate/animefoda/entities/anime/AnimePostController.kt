@@ -1,6 +1,7 @@
 package me.abacate.animefoda.anime
 
 import jakarta.transaction.Transactional
+import me.abacate.animefoda.entities.anime.AnimeRepository
 import me.abacate.animefoda.entities.role.RoleName
 import me.abacate.animefoda.errors.BadRequestResponse
 import me.abacate.animefoda.errors.UnauthorizedResponse
